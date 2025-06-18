@@ -1,4 +1,4 @@
-package gr.tpd.oracle;
+package local.tpd.oracle;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

@@ -1,7 +1,7 @@
 package tech.ailef.snapadmin;
 
 
-import gr.tpd.oracle.OracleConfiguration;
+import local.tpd.oracle.OracleConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

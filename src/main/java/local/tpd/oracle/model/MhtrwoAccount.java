@@ -1,4 +1,4 @@
-package gr.tpd.oracle.model;
+package local.tpd.oracle.model;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
