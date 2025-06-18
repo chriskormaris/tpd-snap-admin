@@ -13,10 +13,10 @@
 							<div class="m-0 p-0 d-flex justify-content-between">
 								<div class="column-title">
 									<span th:if="${field.isPrimaryKey()}">
-										<i title="Primary Key" class="bi bi-key"></i>
+										<i title="Πρωτεύον Κλειδί" class="bi bi-key"></i>
 									</span>
 									<span th:if="${field.isForeignKey()}">
-										<i title="Foreign Key" class="bi bi-link"></i>
+										<i title="Ξένο Κλειδί" class="bi bi-link"></i>
 									</span>
 									<span class="m-0 p-0" th:text="${field.getName()}"></span>
 								</div>

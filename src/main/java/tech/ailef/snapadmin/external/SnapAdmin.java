@@ -88,7 +88,7 @@ public class SnapAdmin {
 	
 	private boolean authenticated;
 	
-	private static final String VERSION = "0.2.0";
+	private static final String VERSION = "0.2.3";
     
     /**
 	 * Builds the SnapAdmin instance by scanning the `@Entity` beans and loading
