@@ -44,7 +44,7 @@ public class ConsoleQuery {
 	private LocalDateTime updatedAt;
 	
 	public ConsoleQuery() {
-		this.title = "Untitled Query";
+		this.title = "Ανώνυμο Ερώτημα";
 		this.createdAt = LocalDateTime.now();
 		this.updatedAt = LocalDateTime.now();
 	}

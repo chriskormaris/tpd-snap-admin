@@ -19,17 +19,98 @@
 
 package tech.ailef.snapadmin.internal;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
+import tech.ailef.snapadmin.external.SnapAdminProperties;
+
+import javax.sql.DataSource;
+import java.util.Properties;
 
 /**
- * Configuration class for the "internal" data source. This is place in the root "internal"
- * package, so as to allow component scanning and detection of models and repositories.
+ * The configuration class for "internal" data source. This is not the
+ * source connected to the user's data/entities, but rather an internal
+ * H2 database which is used by SnapAdmin to store user
+ * settings and other information like operations history.
  */
-@ConditionalOnProperty(name = "snapadmin.enabled", matchIfMissing = true)
+@ConditionalOnProperty(name = "snapadmin.enabled", matchIfMissing = false)
 @ComponentScan
+@EnableConfigurationProperties(SnapAdminProperties.class)
 @Configuration
+@EnableJpaRepositories(
+        entityManagerFactoryRef = "internalEntityManagerFactory",
+        basePackages = { "tech.ailef.snapadmin.internal.repository" }
+)
+@EnableTransactionManagement
 public class InternalSnapAdminConfiguration {
+
+    @Autowired
+    private SnapAdminProperties props;
+
+    /**
+     * Builds and returns the internal data source.
+     *
+     * @return
+     */
+    @Bean
+    DataSource internalDataSource() {
+        DataSourceBuilder<?> dataSourceBuilder = DataSourceBuilder.create();
+        dataSourceBuilder.driverClassName("org.h2.Driver");
+        if (props.isTestMode()) {
+            dataSourceBuilder.url("jdbc:h2:mem:test");
+        } else {
+            dataSourceBuilder.url("jdbc:h2:file:./snapadmin_internal");
+        }
+
+        dataSourceBuilder.username("sa");
+        dataSourceBuilder.password("password");
+        return dataSourceBuilder.build();
+    }
+
+    @Bean
+    LocalContainerEntityManagerFactoryBean internalEntityManagerFactory() {
+        LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
+        factoryBean.setDataSource(internalDataSource());
+        factoryBean.setPersistenceUnitName("internal");
+        factoryBean.setPackagesToScan("tech.ailef.snapadmin.internal.model");
+        factoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+        Properties properties = new Properties();
+        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
+        properties.setProperty("hibernate.hbm2ddl.auto", "update");
+        factoryBean.setJpaProperties(properties);
+        factoryBean.afterPropertiesSet();
+        return factoryBean;
+    }
+
+    /**
+     * The internal transaction manager. It is not defined as a bean
+     * in order to avoid "colliding" with the default transactionManager
+     * registered by the user. Internally, we use this to instantiate a
+     * TransactionTemplate and run all transactions manually instead of
+     * relying on the @link {@link Transactional} annotation.
+     * @return
+     */
+    PlatformTransactionManager internalTransactionManager() {
+        JpaTransactionManager transactionManager = new JpaTransactionManager();
+        transactionManager.setEntityManagerFactory(internalEntityManagerFactory().getObject());
+        return transactionManager;
+    }
+
+    @Bean
+    TransactionTemplate internalTransactionTemplate() {
+        return new TransactionTemplate(internalTransactionManager());
+    }
 
 }

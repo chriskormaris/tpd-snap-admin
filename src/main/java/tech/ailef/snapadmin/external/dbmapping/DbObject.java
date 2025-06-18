@@ -199,14 +199,14 @@ public class DbObject {
 		Optional<?> obj = linkedSchema.getJpaRepository().findById(primaryKeyValue);
 		
 		if (!obj.isPresent()) {
-			throw new SnapAdminException("Invalid value " + primaryKeyValue + " for " + fieldName
-					+ ": item does not exist.");
+			throw new SnapAdminException("Μη έγκυρη τιμή " + primaryKeyValue + " για το πεδίο " + fieldName
+					+ ": το αντικείμενο δεν υπάρχει.");
 		}
 		
 		Method setter = findSetter(field.getJavaName());
 		
 		if (setter == null) {
-			throw new SnapAdminException("Unable to find setter method for " + fieldName + " in " + schema.getClassName());
+			throw new SnapAdminException("Αδύνατο να βρεθεί setter μέθοδος για το πεδίο " + fieldName + " στην κλάση " + schema.getClassName());
 		}
 		
 		try {

@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 	document.querySelector("#console-delete-btn").addEventListener("click", () => {
-		if (confirm("Are you sure you want to delete this query?")) {
+		if (confirm("Είστε σίγουροι ότι θέλετε να διαγράψετε αυτό το ερώτημα?")) {
 			document.querySelector("#console-delete-form").submit();
 		}
 	});

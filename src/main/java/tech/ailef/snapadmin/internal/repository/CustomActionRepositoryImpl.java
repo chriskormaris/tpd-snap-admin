@@ -62,7 +62,7 @@ public class CustomActionRepositoryImpl implements CustomActionRepository {
         CriteriaQuery<UserAction> query = cb.createQuery(UserAction.class);
         Root<UserAction> userAction = query.from(UserAction.class);
 
-        List<Predicate> predicates = new ArrayList<Predicate>();
+        List<Predicate> predicates = new ArrayList<>();
         if (table != null)
             predicates.add(cb.equal(userAction.get("onTable"), table));
         if (actionType != null)
@@ -74,8 +74,7 @@ public class CustomActionRepositoryImpl implements CustomActionRepository {
         
         if (!predicates.isEmpty()) {
             query.select(userAction)
-                 .where(cb.and(
-                            predicates.toArray(new Predicate[predicates.size()])));
+                 .where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
         }
         
         if (request.getSortKey() != null) {
@@ -121,8 +120,7 @@ public class CustomActionRepositoryImpl implements CustomActionRepository {
         
         if (!predicates.isEmpty()) {
             query.select(cb.count(userAction))
-                 .where(cb.and(
-                            predicates.toArray(new Predicate[predicates.size()])));
+                 .where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
         } else {
         	query.select(cb.count(userAction));
         }

@@ -65,7 +65,7 @@ public class EnumFieldType extends DbFieldType {
 			return valueOf.invoke(null, value.toString());
 		} catch (InvocationTargetException e) {
 			if (e.getCause() instanceof IllegalArgumentException)
-				throw new SnapAdminException("Invalid value " + value + " for enum type " + getJavaClass().getSimpleName());
+				throw new SnapAdminException("Μη έγκυρη τιμή " + value + " για τον enum τύπο " + getJavaClass().getSimpleName());
 			else
 				throw new SnapAdminException(e);
 		} catch (NoSuchMethodException | SecurityException | IllegalAccessException e) {

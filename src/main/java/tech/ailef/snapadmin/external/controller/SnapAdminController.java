@@ -19,19 +19,9 @@
 
 package tech.ailef.snapadmin.external.controller;
 
-import java.security.Principal;
-import java.text.DecimalFormat;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Random;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.ConstraintViolationException;
 import org.hibernate.id.IdentifierGenerationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,10 +42,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.ConstraintViolationException;
 import tech.ailef.snapadmin.external.SnapAdmin;
 import tech.ailef.snapadmin.external.SnapAdminProperties;
 import tech.ailef.snapadmin.external.dbmapping.DbObject;
@@ -80,6 +66,18 @@ import tech.ailef.snapadmin.internal.service.ConsoleQueryService;
 import tech.ailef.snapadmin.internal.service.UserActionService;
 import tech.ailef.snapadmin.internal.service.UserSettingsService;
 
+import java.security.Principal;
+import java.text.DecimalFormat;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 /**
  * The main SnapAdmin controller that register most of the routes of the web interface.
  */
@@ -87,7 +85,10 @@ import tech.ailef.snapadmin.internal.service.UserSettingsService;
 @RequestMapping(value= {"/${snapadmin.baseUrl}", "/${snapadmin.baseUrl}/"})
 public class SnapAdminController {
 	private static final Logger logger = LoggerFactory.getLogger(SnapAdminController.class);
-	
+
+	private static final String UNIQUE_CONSTRAINT_MESSAGE = "Το %s αυτό υπάρχει ήδη στον πίνακα. " +
+			"Εισάγετε ένα διαφορετικό.";
+
 	@Autowired
 	private SnapAdminProperties properties;
 	
@@ -132,7 +133,7 @@ public class SnapAdminController {
 		model.addAttribute("query", query);
 		model.addAttribute("counts", counts);
 		model.addAttribute("activePage", "entities");
-		model.addAttribute("title", "Entities | Index");
+		model.addAttribute("title", "Πίνακες | Index");
 		
 		return "snapadmin/home";
 	}
@@ -214,7 +215,7 @@ public class SnapAdminController {
 				result = repository.findAll(schema, page, pageSize, sortKey, sortOrder);
 			}
 				
-			model.addAttribute("title", "Entities | " + schema.getJavaClass().getSimpleName() + " | Index");
+			model.addAttribute("title", "Πίνακες | " + schema.getJavaClass().getSimpleName() + " | Δείκτης");
 			model.addAttribute("page", result);
 			model.addAttribute("schema", schema);
 			model.addAttribute("activePage", "entities");
@@ -274,7 +275,7 @@ public class SnapAdminController {
 			);
 		});
 		
-		model.addAttribute("title", "Entities | " + schema.getJavaClass().getSimpleName() + " | " + object.getDisplayName());
+		model.addAttribute("title", "Πίνακες | " + schema.getJavaClass().getSimpleName() + " | " + object.getDisplayName());
 		model.addAttribute("object", object);
 		model.addAttribute("activePage", "entities");
 		model.addAttribute("schema", schema);
@@ -289,13 +290,13 @@ public class SnapAdminController {
 		
 		if (!schema.isCreateEnabled()) {
 			attr.addFlashAttribute("errorTitle", "Unauthorized");
-			attr.addFlashAttribute("error", "CREATE operations have been disabled on this type (" + schema.getJavaClass().getSimpleName() + ").");
+			attr.addFlashAttribute("error", "CREATE λειτουργίες έχουν απενεργοποιηθεί για αυτόν τον τύπο (" + schema.getJavaClass().getSimpleName() + ").");
 			return "redirect:/" + properties.getBaseUrl() + "/model/" + className;
 		}
 		
 		model.addAttribute("className", className);
 		model.addAttribute("schema", schema);
-		model.addAttribute("title", "Entities | " + schema.getJavaClass().getSimpleName() + " | Create");
+		model.addAttribute("title", "Πίνακες | " + schema.getJavaClass().getSimpleName() + " | Δημιουργία");
 		model.addAttribute("activePage", "entities");
 		model.addAttribute("create", true);
 		
@@ -310,7 +311,7 @@ public class SnapAdminController {
 		
 		if (!schema.isEditEnabled()) {
 			attr.addFlashAttribute("errorTitle", "Unauthorized");
-			attr.addFlashAttribute("error", "EDIT operations have been disabled on this type (" + schema.getJavaClass().getSimpleName() + ").");
+			attr.addFlashAttribute("error", "EDIT λειτουργίες έχουν απενεργοποιηθεί για αυτόν τον τύπο (" + schema.getJavaClass().getSimpleName() + ").");
 			return "redirect:/" + properties.getBaseUrl() + "/model/" + className;
 		}
 		
@@ -320,7 +321,7 @@ public class SnapAdminController {
 			);
 		});
 		
-		model.addAttribute("title", "Entities | " + schema.getJavaClass().getSimpleName() + " | Edit | " + object.getDisplayName());
+		model.addAttribute("title", "Πίνακες | " + schema.getJavaClass().getSimpleName() + " | Επεξεργασία | " + object.getDisplayName());
 		model.addAttribute("className", className);
 		model.addAttribute("object", object);
 		model.addAttribute("schema", schema);
@@ -344,21 +345,21 @@ public class SnapAdminController {
 		String authUser = principal != null ? principal.getName() : null;
 		
 		if (!schema.isDeleteEnabled()) {
-			attr.addFlashAttribute("errorTitle", "Unable to DELETE row");
-			attr.addFlashAttribute("error", "DELETE operations have been disabled on this table.");
+			attr.addFlashAttribute("errorTitle", "Αδύνατο το DELETE γραμμής");
+			attr.addFlashAttribute("error", "DELETE λειτουργίες έχουν απενεργοποιηθεί για αυτόν τον πίνακα.");
 			return "redirect:/" + properties.getBaseUrl() + "/model/" + className;
 		}
 		
 		try {
 			repository.delete(schema, id);
 		} catch (DataIntegrityViolationException e) {
-			attr.addFlashAttribute("errorTitle", "Unable to DELETE row");
+			attr.addFlashAttribute("errorTitle", "Αδύνατο το DELETE γραμμής");
 			attr.addFlashAttribute("error", e.getMessage());
 			return "redirect:/" + properties.getBaseUrl() + "/model/" + className;
 		}
 		
 		saveAction(new UserAction(schema.getTableName(), id, "DELETE", schema.getClassName(), authUser));
-		attr.addFlashAttribute("message", "Deleted " + schema.getJavaClass().getSimpleName() + " with " 
+		attr.addFlashAttribute("message", "Διαγράφηκε " + schema.getJavaClass().getSimpleName() + " με "
 				+ schema.getPrimaryKey().getName() + "=" + id);
 
 		return "redirect:/" + properties.getBaseUrl() + "/model/" + className;
@@ -378,8 +379,8 @@ public class SnapAdminController {
 		String authUser = principal != null ? principal.getName() : null;
 		
 		if (!schema.isDeleteEnabled()) {
-			attr.addFlashAttribute("errorTitle", "Unable to DELETE rows");
-			attr.addFlashAttribute("error", "DELETE operations have been disabled on this table.");
+			attr.addFlashAttribute("errorTitle", "Αδύνατο το DELETE γραμμών");
+			attr.addFlashAttribute("error", "DELETE λειτουργίες έχουν απενεργοποιηθεί για αυτόν τον πίνακα.");
 			return "redirect:/" + properties.getBaseUrl() + "/model/" + className;
 		}
 		
@@ -394,7 +395,7 @@ public class SnapAdminController {
 		}
 		
 		if (countDeleted > 0)
-			attr.addFlashAttribute("message", "Deleted " + countDeleted + " of " + ids.length + " items");
+			attr.addFlashAttribute("message", "Διαγράφηκαν " + countDeleted + " από " + ids.length + " αντικείμενα");
 		
 		for (String id : ids) {
 			saveAction(new UserAction(schema.getTableName(), id, "DELETE", schema.getClassName(), authUser));
@@ -434,7 +435,7 @@ public class SnapAdminController {
 				if (list.size() == 1) {
 					multiValuedParams.put(param, new ArrayList<>());
 				} else {
-					list.removeIf(f -> f.isBlank());
+					list.removeIf(String::isBlank);
 					multiValuedParams.put(
 						param, 
 						list
@@ -456,7 +457,7 @@ public class SnapAdminController {
 		
 		if (!schema.isCreateEnabled() && create) {
 			attr.addFlashAttribute("errorTitle", "Unauthorized");
-			attr.addFlashAttribute("error", "CREATE operations have been disabled on this type (" + schema.getJavaClass().getSimpleName() + ").");
+			attr.addFlashAttribute("error", "CREATE λειτουργίες έχουν απενεργοποιηθεί για αυτόν τον τύπο (" + schema.getJavaClass().getSimpleName() + ").");
 			return "redirect:/" + properties.getBaseUrl() + "/model/" + className;
 		}
 
@@ -464,62 +465,76 @@ public class SnapAdminController {
 		if (pkValue == null || pkValue.isBlank()) {
 			pkValue = null;
 		}
-		
+
 		try {
 			if (pkValue == null) {
 				Object newPrimaryKey = repository.create(schema, params, files, pkValue);
-				repository.attachManyToMany(schema, newPrimaryKey, multiValuedParams);				
+				repository.attachManyToMany(schema, newPrimaryKey, multiValuedParams);
 				pkValue = newPrimaryKey.toString();
-				attr.addFlashAttribute("message", "Item created successfully.");
+				attr.addFlashAttribute("message", "Το αντικείμενο δημιουργήθηκε επιτυχώς.");
 				saveAction(new UserAction(schema.getTableName(), pkValue, "CREATE", schema.getClassName(), authUser));
 			} else {
 				Object parsedPkValue = schema.getPrimaryKey().getType().parseValue(pkValue);
 
 				Optional<DbObject> object = repository.findById(schema, parsedPkValue);
-				
+
 				if (!object.isEmpty()) {
 					if (create) {
-						attr.addFlashAttribute("errorTitle", "Unable to create item");
-						attr.addFlashAttribute("error", "Item with id " + object.get().getPrimaryKeyValue() + " already exists.");
+						attr.addFlashAttribute("errorTitle", "Αδύνατο να δημιουργηθεί το αντικείμενο");
+						attr.addFlashAttribute("error", "Αντικείμενο με id " + object.get().getPrimaryKeyValue() + " υπάρχει ήδη.");
 						attr.addFlashAttribute("params", params);
 					} else {
 						repository.update(schema, params, files);
 						repository.attachManyToMany(schema, parsedPkValue, multiValuedParams);
-						attr.addFlashAttribute("message", "Item saved successfully.");
+						attr.addFlashAttribute("message", "Το αντικείμενο αποθηκεύτηκε επιτυχώς.");
 						saveAction(new UserAction(schema.getTableName(), parsedPkValue.toString(), "EDIT", schema.getClassName(), authUser));
 					}
 				} else {
 					Object newPrimaryKey = repository.create(schema, params, files, pkValue);
 					repository.attachManyToMany(schema, newPrimaryKey, multiValuedParams);
-					attr.addFlashAttribute("message", "Item created successfully");
+					attr.addFlashAttribute("message", "Το αντικείμενο δημιουργήθηκε επιτυχώς");
 					saveAction(new UserAction(schema.getTableName(), pkValue, "CREATE", schema.getClassName(), authUser));
 				}
 			}
-		} catch (DataIntegrityViolationException | UncategorizedSQLException | IdentifierGenerationException e) {
-			attr.addFlashAttribute("errorTitle", "Error");
+		} catch (DataIntegrityViolationException e) {
+			attr.addFlashAttribute("errorTitle", "Σφάλμα βάσης");
+			if (e.getMessage().contains("ORA-00001: unique constraint (DTPD.MHTRWO_AFM_UNIQUE) violated")) {
+				attr.addFlashAttribute("error", UNIQUE_CONSTRAINT_MESSAGE.formatted("ΑΦΜ"));
+			} else if (e.getMessage().contains("ORA-00001: unique constraint (DTPD.MHTRWO_ACCOUNT_IBAN_UNIQUE) violated")) {
+				attr.addFlashAttribute("error", UNIQUE_CONSTRAINT_MESSAGE.formatted("ΙΒΑΝ"));
+			} else {
+				attr.addFlashAttribute("error", e.getMessage());
+			}
+			attr.addFlashAttribute("params", params);
+		} catch (UncategorizedSQLException | IdentifierGenerationException e) {
+			attr.addFlashAttribute("errorTitle", "Σφάλμα βάσης");
 			attr.addFlashAttribute("error", e.getMessage());
 			attr.addFlashAttribute("params", params);
 		} catch (ConstraintViolationException e) {
-			attr.addFlashAttribute("errorTitle", "Validation error");
-			attr.addFlashAttribute("error", "See below for details");
+			attr.addFlashAttribute("errorTitle", "Σφάλμα επαλήθευσης");
+			attr.addFlashAttribute("error", "Δείτε παρακάτω για λεπτομέρειες");
 			attr.addFlashAttribute("validationErrors", new ValidationErrorsContainer(e));
 			attr.addFlashAttribute("params", params);
 		} catch (SnapAdminException e) {
 			Throwable cause = e.getCause() != null ? e.getCause() : e;
 			logger.error(Arrays.toString(cause.getStackTrace()));
-			attr.addFlashAttribute("errorTitle", "Error");
+			attr.addFlashAttribute("errorTitle", "Σφάλμα");
 			attr.addFlashAttribute("error", e.getMessage());
 			attr.addFlashAttribute("params", params);
 		} catch (TransactionSystemException e) {
 			if (e.getRootCause() instanceof ConstraintViolationException) {
 				ConstraintViolationException ee = (ConstraintViolationException)e.getRootCause();
-				attr.addFlashAttribute("errorTitle", "Validation error");
-				attr.addFlashAttribute("error", "See below for details");
+				attr.addFlashAttribute("errorTitle", "Σφάλμα επαλήθευσης");
+				attr.addFlashAttribute("error", "Δείτε παρακάτω για λεπτομέρειες");
 				attr.addFlashAttribute("validationErrors", new ValidationErrorsContainer(ee));
 				attr.addFlashAttribute("params", params);
 			} else {
 				throw new RuntimeException(e);
 			}
+		} catch (RuntimeException e) {
+			attr.addFlashAttribute("errorTitle", "Σφάλμα βάσης");
+			attr.addFlashAttribute("error", e.getMessage());
+			attr.addFlashAttribute("params", params);
 		}
 
 
@@ -535,6 +550,9 @@ public class SnapAdminController {
 	
 	@GetMapping("/logs")
 	public String logs(Model model, LogsSearchRequest searchRequest) {
+		if (searchRequest.getUsername() != null && searchRequest.getUsername().isEmpty()) {
+			searchRequest.setUsername(null);
+		}
 		model.addAttribute("activePage", "logs");
 		model.addAttribute(
 			"page", 
@@ -582,16 +600,16 @@ public class SnapAdminController {
 		
 		if (tabs.isEmpty()) {
 			ConsoleQuery q = new ConsoleQuery();
-			
-			int randomIndex = new Random().nextInt(0, snapAdmin.getSchemas().size());
-			String randomTable = snapAdmin.getSchemas().get(randomIndex).getTableName();
-			
+
+			// int randomIndex = new Random().nextInt(0, snapAdmin.getSchemas().size());
+			// String randomTable = snapAdmin.getSchemas().get(randomIndex).getTableName();
+
 			q.setSql(
-				"-- It's recommended to always include a LIMIT clause in your query\n"
-				+ "-- Although the SQL Console supports pagination, it retrieves the entire ResultSet\n\n"
-				+ "-- SELECT * FROM " + randomTable + " LIMIT 1000;\n"
+				"-- Σας προτείνουμε να συμπεριλάβετε την έκφραση ROWNUM στο ερώτημά σας\n"
+				+ "-- Παρόλο που η Κονσόλα SQL υποστηρίζει σελιδοποίηση, επιστρέφει όλα τα αποτελέσματα\n\n"
+				+ "SELECT * FROM DTPD.MHTRWO WHERE ROWNUM <= 1000"
 			);
-			
+
 			consoleService.save(q);
 			return "redirect:/" + properties.getBaseUrl() + "/console/run/" + q.getId();
 		} else {
@@ -684,7 +702,7 @@ public class SnapAdminController {
 	
 	@PostMapping("/settings")
 	public String settings(@RequestParam Map<String, String> params, Model model) {
-		String next = params.getOrDefault("next", "settings/settings");
+		String next = params.getOrDefault("next", "snapadmin/settings/settings");
 		
 		for (String paramName : params.keySet()) {
 			if (paramName.equals("next")) continue;
