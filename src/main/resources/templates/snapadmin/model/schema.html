@@ -8,24 +8,24 @@
 			<nav th:replace="~{snapadmin/fragments/resources :: navbar}"></nav>
 		    <div class="d-flex">
 		    	<div th:replace="~{snapadmin/fragments/resources :: sidebar('entities')}"></div>
-		    	<div class="main-content bg-lighter">
+		    	<div class="main-content bg-lighter main-content-expanded">
 					<h1 class="fw-bold mb-4"><i class="bi bi-database"></i> 
-						<a class="align-middle" th:href="|/${snapadmin_baseUrl}|">Entities</a> 
+						<a class="align-middle" th:href="|/${snapadmin_baseUrl}|">Πίνακες</a>
 						<i class="align-middle bi bi-chevron-double-right"></i>
 						<a class="align-middle" th:href="|/${snapadmin_baseUrl}/model/${schema.getJavaClass().getName()}|"> [[ ${schema.getJavaClass().getSimpleName()} ]]</a>
-						<i class="align-middle bi bi-chevron-double-right"></i><span class="align-middle"> Schema</span>
+						<i class="align-middle bi bi-chevron-double-right"></i><span class="align-middle"> Σχήμα</span>
 					</h1>
 		    		<div class="row mt-4">
 		    			<div class="col">
 		    				<div class="w-100 d-flex inner-navigation">
 	    						<a th:href="|/${snapadmin_baseUrl}/model/${schema.getJavaClass().getName()}|">
 		    						<div class="ui-tab ps-5 pe-5 p-3">
-		    							<i class="bi bi-database pe-2"></i> DATA
+		    							<i class="bi bi-database pe-2"></i> ΔΕΔΟΜΕΝΑ
 		    						</div>
 		    					</a>
 		    					<a th:href="|/${snapadmin_baseUrl}/model/${schema.getJavaClass().getName()}/schema|" class="active">
 		    						<div class="ui-tab ps-5 pe-5 p-3">
-		    							<i class="bi bi-table pe-2"></i> SCHEMA
+		    							<i class="bi bi-table pe-2"></i> ΣΧΗΜΑ
 		    						</div>
 		    					</a>
 		    					<div class="inner-navigation-border flex-grow-1">
@@ -39,7 +39,7 @@
 											[[ ${schema.getTableName()} ]]
 										</span>
 									</h3>
-									<h3 class="create-button"><a  th:title="|${!schema.isCreateEnabled() ? 'CREATE disabled for this type' : 'Create new item'}|"  
+									<h3 class="create-button"><a  th:title="|${!schema.isCreateEnabled() ? 'Το CREATE είναι απενεργοποιημένο για αυτόν τον τύπο' : 'Δημιουργία νέου αντικειμένου'}|"
 										th:href="|/${snapadmin_baseUrl}/model/${schema.getClassName()}/create|"
 										th:class="|${!schema.isCreateEnabled() ? 'disable' : ''}|"><i class="bi bi-plus-square"></i></a></h3>
 								</div>
@@ -63,17 +63,17 @@
 								<table class="table table-striped align-middle">
 									<tr class="table-data-row">
 										<th style="width: 32px"></th>
-										<th>Column</th>
-										<th>Type</th>
+										<th>Στήλη</th>
+										<th>Τύπος</th>
 										<th>Nullable</th>
 									</tr>
 									<tr th:each="field : ${schema.getSortedFields()}" class="table-data-row">
 										<td>
 											<span th:if="${field.isPrimaryKey()}">
-												<i title="Primary Key" class="bi bi-key"></i>
+												<i title="Πρωτεύον Κλειδί" class="bi bi-key"></i>
 											</span>
 											<span th:if="${field.isForeignKey()}">
-												<i title="Foreign Key" class="bi bi-link"></i>
+												<i title="Ξένο Κλειδί" class="bi bi-link"></i>
 											</span>
 										</td>
 										<td>

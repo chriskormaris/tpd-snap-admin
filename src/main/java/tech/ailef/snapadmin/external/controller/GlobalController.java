@@ -8,22 +8,21 @@
 
 package tech.ailef.snapadmin.external.controller;
 
-import java.security.Principal;
-import java.util.Map;
-
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import tech.ailef.snapadmin.external.SnapAdmin;
 import tech.ailef.snapadmin.external.SnapAdminProperties;
 import tech.ailef.snapadmin.external.exceptions.SnapAdminException;
 import tech.ailef.snapadmin.external.exceptions.SnapAdminNotFoundException;
 import tech.ailef.snapadmin.internal.UserConfiguration;
+
+import java.security.Principal;
+import java.util.Map;
 
 /**
  * This class registers some global ModelAttributes and exception handlers.
@@ -40,11 +39,11 @@ public class GlobalController {
 	
 	@Autowired
 	private SnapAdmin snapAdmin;
-	
+
 	@ExceptionHandler(SnapAdminException.class)
 	public String handleException(Exception e, Model model, HttpServletResponse response) {
 		model.addAttribute("status", "");
-		model.addAttribute("error", "Error");
+		model.addAttribute("error", "Σφάλμα");
 		model.addAttribute("message", e.getMessage());
 		model.addAttribute("snapadmin_userConf", userConf);
 		model.addAttribute("snapadmin_baseUrl", getBaseUrl());
@@ -56,7 +55,7 @@ public class GlobalController {
 	@ExceptionHandler(SnapAdminNotFoundException.class)
 	public String handleNotFound(Exception e, Model model, HttpServletResponse response) {
 		model.addAttribute("status", "404");
-		model.addAttribute("error", "Error");
+		model.addAttribute("error", "Σφάλμα");
 		model.addAttribute("message", e.getMessage());
 		model.addAttribute("snapadmin_userConf", userConf);
 		model.addAttribute("snapadmin_baseUrl", getBaseUrl());
@@ -65,7 +64,7 @@ public class GlobalController {
 		response.setStatus(404);
 		return "snapadmin/other/error";
 	}
-	
+
 	@ModelAttribute("snapadmin_version")
 	public String getVersion() {
 		return snapAdmin.getVersion();
@@ -123,8 +122,9 @@ public class GlobalController {
 	
 	@ModelAttribute("snapadmin_authenticatedUser")
 	public String authenticatedUser(Principal principal) {
-		if (principal == null) return null;
-		return principal.getName();
+		// if (principal == null) return null;
+		// return principal.getName();
+        return snapAdmin.getUsername();
 	}
-}
 
+}

@@ -10,15 +10,15 @@
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h1 class="modal-title fs-5" id="csvQueryExportModalLabel">Export settings</h1>
+							<h1 class="modal-title fs-5" id="csvQueryExportModalLabel">Ρυθμίσεις εξαγωγής</h1>
 							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 						</div>
 						<div class="modal-body">
 							<div class="container-fluid">
-								<p class="text-muted">The export file will contain all the pages in the results. If the table is big,
-								this might take some time.</p>
+								<p class="text-muted">Το αρχείο εξαγωγής περιλαμβάνει όλες τις σελίδες στα αποτελέσματα.
+								Αν ο πίνακας είναι μεγάλος, ίσως αργήσει λίγο.</p>
 								
-								<h5 class="fw-bold">Include columns</h5>
+								<h5 class="fw-bold">Συμπερίληψη στηλών</h5>
 								<div th:each="field : ${results.getSortedFields()}" th:if="${field.isExportable()}">
 									<div class="form-check">
 										<input class="form-check-input" type="checkbox" 
@@ -30,7 +30,7 @@
 										</label>
 									</div>
 								</div>
-								<h5 class="fw-bold mt-3">Export format</h3>
+								<h5 class="fw-bold mt-3">Μορφή εξαγωγής</h5>
 								<select name="format" class="form-select">
 									<option th:each="format : ${T(tech.ailef.snapadmin.external.dto.DataExportFormat).values()}"
 										th:value="${format}" th:text="${format}">
@@ -42,14 +42,14 @@
 										id="__check_raw"
 										th:name="raw">
 									<label class="form-check-label" for="__check_raw">
-								    	Export raw values
+								    	Εξαγωγή πραγματικών τιμών
 									</label>
 								</div>
 							</div>
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-							<button type="submit" class="btn btn-primary">Export [[ ${pagination.getMaxElement()} ]] rows</button>
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ακύρωση</button>
+							<button type="submit" class="btn btn-primary">Εξαγωγή [[ ${pagination.getMaxElement()} ]] γραμμών</button>
 						</div>
 					</div>
 				</div>
@@ -61,8 +61,8 @@
     		<nav th:replace="~{snapadmin/fragments/resources :: navbar}"></nav>
 	        <div class="d-flex">
 	        	<div th:replace="~{snapadmin/fragments/resources :: sidebar('console')}"></div>
-	        	<div class="main-content bg-lighter">
-					<h1 class="fw-bold mb-4"><i class="align-middle bi bi-terminal"></i><span class="align-middle"> SQL console</span></h1>
+	        	<div class="main-content bg-lighter main-content-expanded">
+					<h1 class="fw-bold mb-4"><i class="align-middle bi bi-terminal"></i><span class="align-middle"> Κονσόλα SQL</span></h1>
 	        		<div class="row mt-4">
 	        			<div class="col">
 							<div class="w-100 d-flex inner-navigation">
@@ -84,14 +84,14 @@
 	    					</div>
 							<div class="box with-navigation">
 								<form th:action="|/${snapadmin_baseUrl}/console/run/${activeQuery.getId()}|" method="GET">
-									<span class="text-muted fw-bold mb-1 d-inline-block">Query title</span>
+									<span class="text-muted fw-bold mb-1 d-inline-block">Τίτλος ερωτήματος</span>
 									<input type="text" class="form-control mb-3" 
 									 		name="queryTitle" th:value="${activeQuery.getTitle()}">
 									<span class="text-muted fw-bold mb-1 d-inline-block">SQL</span>
 		        					<textarea class="form-control font-monospace" rows="6" name="query"
 		        						th:text="${activeQuery.getSql()}"></textarea>
-		        					<input class="ui-btn btn btn-primary mt-3" type="submit" value="Run">
-		        					<a href="#" class="ms-4 ui-btn btn btn-danger mt-3" id="console-delete-btn">Delete</a>
+		        					<input class="ui-btn btn btn-primary mt-3" type="submit" value="Εκτέλεση">
+		        					<a href="#" class="ms-4 ui-btn btn btn-danger mt-3" id="console-delete-btn">Διαγραφή</a>
 	        					</form>
 	        					<div class="d-flex justify-content-end">
 									<form th:action="|/${snapadmin_baseUrl}/console/delete/${activeQuery.getId()}|" method="POST"
@@ -109,11 +109,18 @@
 											<div th:if="${pagination != null && pagination.getMaxPage() > 1}" class="d-flex w-100">
 												<ul class="pagination me-3">
 													<li class="page-item" th:if="${pagination.getCurrentPage() != 1}">
+														<a class="page-link"
+														   th:href="@{|${snapadmin_requestUrl}${pagination.getLink(1)}|}"
+														   aria-label="First">
+															<span class="sr-only">Πρώτη</span>
+														</a>
+													</li>
+													<li class="page-item" th:if="${pagination.getCurrentPage() != 1}">
 														<a class="page-link" 
 														th:href="@{|${snapadmin_requestUrl}${pagination.getLink(pagination.getCurrentPage() - 1)}|}" 
 														aria-label="Previous">
 														    <span aria-hidden="true">&laquo;</span>
-														    <span class="sr-only">Previous</span>
+<!--														    <span class="sr-only">Προηγ.</span>-->
 													  	</a>
 													</li>
 												    
@@ -136,19 +143,28 @@
 													      th:if="${!pagination.isLastPage()}"
 													      th:href="@{|${snapadmin_requestUrl}${pagination.getLink(pagination.getCurrentPage() + 1)}|}"
 													      aria-label="Next">
-													        <span class="sr-only">Next</span>
+<!--													        <span class="sr-only">Επόμ.</span>-->
 													        <span aria-hidden="true">&raquo;</span>
 													      </a>
 												    </li>
+													<li class="page-item">
+														<a class="page-link"
+														   th:if="${!pagination.isLastPage()}"
+														   th:href="@{|${snapadmin_requestUrl}${pagination.getLink(pagination.getMaxPage())}|}"
+														   aria-label="Last">
+															<span class="sr-only">Τελευταία</span>
+														</a>
+													</li>
 												</ul>
 												<div class="d-flex align-items-center flex-grow-1" th:if="${pagination.getMaxPage() > 1}">
 													<p class="m-0 p-0 me-2">
-														<i>Showing [[ ${results.size()} ]] of [[ ${pagination.getMaxElement()} ]] 
-															results in [[ ${elapsedTime} ]] seconds</i>
+														<i>Εμφανίζονται [[ ${results.size()} ]] από τα [[ ${pagination.getMaxElement()} ]]
+															αποτελέσματα σε [[ ${elapsedTime} ]] δευτερόλεπτα</i>
 													</p>
 													<form method="GET" th:action="|/${snapadmin_baseUrl}/console/run/${activeQuery.getId()}|">
 														<select class="form-select page-size" name="pageSize" style="width: 200px">
-													  		<option disabled>Page size</option>
+													  		<option disabled>Μέγεθος σελίδας</option>
+													  		<option th:selected="${pagination.getPageSize() == 20}">20</option>
 													  		<option th:selected="${pagination.getPageSize() == 50}">50</option>
 													  		<option th:selected="${pagination.getPageSize() == 100}">100</option>
 													  		<option th:selected="${pagination.getPageSize() == 150}">150</option>
@@ -164,12 +180,13 @@
 											
 											<div class="d-flex align-items-center flex-grow-1"  th:if="${pagination.getMaxPage() == 1}">
 												<p class="m-0 p-0 me-2">
-													<i>Showing [[ ${results.size()} ]] of [[ ${pagination.getMaxElement()} ]] 
-														results in [[ ${elapsedTime} ]] seconds</i>
+													<i>Εμφανίζονται [[ ${results.size()} ]] από τα [[ ${pagination.getMaxElement()} ]]
+														αποτελέσματα σε [[ ${elapsedTime} ]] δευτερόλεπτα</i>
 												</p>
 												<form method="GET" th:action="|/${snapadmin_baseUrl}/console/run/${activeQuery.getId()}|">
 													<select name="pageSize" class="form-select page-size" style="width: 200px">
-												  		<option disabled>Page size</option>
+												  		<option disabled>Μέγεθος σελίδας</option>
+														<option th:selected="${pagination.getPageSize() == 20}">20</option>
 												  		<option th:selected="${pagination.getPageSize() == 50}">50</option>
 												  		<option th:selected="${pagination.getPageSize() == 100}">100</option>
 												  		<option th:selected="${pagination.getPageSize() == 150}">150</option>
@@ -196,11 +213,18 @@
 											<div th:if="${pagination != null && pagination.getMaxPage() > 1}" class="d-flex">
 												<ul class="pagination me-3">
 													<li class="page-item" th:if="${pagination.getCurrentPage() != 1}">
+														<a class="page-link"
+														   th:href="@{|${snapadmin_requestUrl}${pagination.getLink(1)}|}"
+														   aria-label="First">
+															<span class="sr-only">Πρώτη</span>
+														</a>
+													</li>
+													<li class="page-item" th:if="${pagination.getCurrentPage() != 1}">
 														<a class="page-link" 
 														th:href="@{|${snapadmin_requestUrl}${pagination.getLink(pagination.getCurrentPage() - 1)}|}" 
 														aria-label="Previous">
 														    <span aria-hidden="true">&laquo;</span>
-														    <span class="sr-only">Previous</span>
+<!--														    <span class="sr-only">Προηγ.</span>-->
 													  	</a>
 													</li>
 												    
@@ -223,19 +247,28 @@
 													      th:if="${!pagination.isLastPage()}"
 													      th:href="@{|${snapadmin_requestUrl}${pagination.getLink(pagination.getCurrentPage() + 1)}|}"
 													      aria-label="Next">
-													        <span class="sr-only">Next</span>
+<!--													        <span class="sr-only">Επόμ.</span>-->
 													        <span aria-hidden="true">&raquo;</span>
 													      </a>
 												    </li>
+													<li class="page-item">
+														<a class="page-link"
+														   th:if="${!pagination.isLastPage()}"
+														   th:href="@{|${snapadmin_requestUrl}${pagination.getLink(pagination.getMaxPage())}|}"
+														   aria-label="Last">
+															<span class="sr-only">Τελευταία</span>
+														</a>
+													</li>
 												</ul>
 												<div class="d-flex align-items-center" th:if="${pagination.getMaxPage() > 1}">
 													<p class="m-0 p-0 me-2">
-														<i>Showing [[ ${results.size()} ]] of [[ ${pagination.getMaxElement()} ]] 
-															results in [[ ${elapsedTime} ]] seconds</i>
+														<i>Εμφανίζονται [[ ${results.size()} ]] από τα [[ ${pagination.getMaxElement()} ]]
+															αποτελέσματα σε [[ ${elapsedTime} ]] δευτερόλεπτα</i>
 													</p>
 													<form method="GET" th:action="|/${snapadmin_baseUrl}/console/run/${activeQuery.getId()}|">
 														<select name="pageSize" class="form-select page-size" style="width: 200px">
-													  		<option disabled>Page size</option>
+													  		<option disabled>Μέγεθος σελίδας</option>
+															<option th:selected="${pagination.getPageSize() == 20}">20</option>
 													  		<option th:selected="${pagination.getPageSize() == 50}">50</option>
 													  		<option th:selected="${pagination.getPageSize() == 100}">100</option>
 													  		<option th:selected="${pagination.getPageSize() == 150}">150</option>
@@ -247,12 +280,13 @@
 											
 											<div class="d-flex align-items-center"  th:if="${pagination.getMaxPage() == 1}">
 												<p class="m-0 p-0 me-2">
-													<i>Showing [[ ${results.size()} ]] of [[ ${pagination.getMaxElement()} ]] 
-														results in [[ ${elapsedTime} ]] seconds</i>
+													<i>Εμφανίζονται [[ ${results.size()} ]] από τα [[ ${pagination.getMaxElement()} ]]
+														αποτελέσματα σε [[ ${elapsedTime} ]] δευτερόλεπτα</i>
 												</p>
 												<form method="GET" th:action="|/${snapadmin_baseUrl}/console/run/${activeQuery.getId()}|">
 													<select name="pageSize" class="form-select page-size" style="width: 200px">
-												  		<option disabled>Page size</option>
+												  		<option disabled>Μέγεθος σελίδας</option>
+														<option th:selected="${pagination.getPageSize() == 20}">20</option>
 												  		<option th:selected="${pagination.getPageSize() == 50}">50</option>
 												  		<option th:selected="${pagination.getPageSize() == 100}">100</option>
 												  		<option th:selected="${pagination.getPageSize() == 150}">150</option>

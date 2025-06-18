@@ -105,6 +105,10 @@ div.main-content {
 	padding-top: 80px;
 }
 
+div.main-content-expanded {
+    width: calc(100% - 53px);
+}
+
 div.main-content.full-screen {
 	padding: 0px;
 	padding-top: 56px;
@@ -335,6 +339,13 @@ span.input-group-text {
 	width: 5%;
 }
 
+button.expand-collapse-sidebar {
+    width: 200px;
+}
+
+div.sidebar-collapsed, button.sidebar-collapsed {
+	width: 53px;
+}
 
 @media (max-width: 767px) {
 	div.sidebar {
@@ -346,7 +357,14 @@ span.input-group-text {
 		position: fixed;
 	}
 
-	
+	button.expand-collapse-sidebar {
+        width: 53px;
+    }
+
+    div.version {
+        display: none;
+    }
+
 	div.main-content {
 		width: calc(100% - 53px);
 		padding: 15px;

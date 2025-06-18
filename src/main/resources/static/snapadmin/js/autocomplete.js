@@ -1,4 +1,4 @@
-/* Request to the autocomplete REST endpoit */
+/* Request to the autocomplete REST endpoint */
 async function getSuggestions(className, query) {
 	const response = await fetch(`/${baseUrl}/api/autocomplete/${className}?query=${query}`);
 	const suggestions = await response.json();
@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		});
 		
 		input.parentElement.querySelector("div.suggestions").innerHTML = 
-			`<div class="suggestion p-2 m-0">Enter a valid ID or start typing for suggestions</div>`;
+			`<div class="suggestion p-2 m-0">Εισάγετε ένα έγκυρο ID ή πληκτρολογείστε για προτάσεις</div>`;
 		
 		input.addEventListener('keyup', async function(e) {
 			let suggestions = await getSuggestions(e.target.dataset.classname, e.target.value);
@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			
 			if (e.target.value.length <= 0) {
 				input.parentElement.querySelector("div.suggestions").innerHTML = 
-					`<div class="suggestion p-2 m-0">Enter a valid ID or start typing for suggestions</div>`;
+					`<div class="suggestion p-2 m-0">Εισάγετε ένα έγκυρο ID ή πληκτρολογείστε για προτάσεις</div>`;
 				return;
 			}
 			
@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				let suggestionDiv = document.createElement('div');
 				suggestionDiv.innerHTML = 
 					`<div class="suggestion p-2 m-0">
-						<p class="p-0 m-0">No results</p>
+						<p class="p-0 m-0">Κανένα αποτέλεσμα</p>
 					</div>`;
 					 
 				input.parentElement.querySelector("div.suggestions").appendChild(suggestionDiv);

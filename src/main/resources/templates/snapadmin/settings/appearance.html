@@ -7,37 +7,37 @@
 			<nav th:replace="~{snapadmin/fragments/resources :: navbar}"></nav>
 		    <div class="d-flex">
 		    	<div th:replace="~{snapadmin/fragments/resources :: sidebar('entities')}"></div>
-		    	<div class="main-content bg-lighter">
+		    	<div class="main-content bg-lighter main-content-expanded">
 		    		<th:block th:replace="~{snapadmin/fragments/resources :: alerts}"></th:block>
 					<h1 class="fw-bold mb-4"><i class="align-middle bi bi-gear"></i>
-						<span class="align-middle"><a th:href="|/${snapadmin_baseUrl}|">Settings</a></span> 
+						<span class="align-middle"><a th:href="|/${snapadmin_baseUrl}/settings|">Ρυθμίσεις</a></span>
 					</h1>
 		    		<div class="row mt-4">
 		    			<div class="col">
 	    					<div class="w-100 d-flex inner-navigation">
 	    						<a th:href="|/${snapadmin_baseUrl}/settings|">
 		    						<div class="ui-tab ps-5 pe-5 p-3">
-		    							<i class="bi bi-database pe-2"></i> GENERAL
+		    							<i class="bi bi-database pe-2"></i> ΓΕΝΙΚΑ
 		    						</div>
 		    					</a>
 		    					<a th:href="|/${snapadmin_baseUrl}/settings/appearance|" class="active">
 		    						<div class="ui-tab ps-5 pe-5 p-3">
-		    							<i class="bi bi-table pe-2"></i> APPEARANCE
+		    							<i class="bi bi-table pe-2"></i> ΕΜΦΑΝΙΣΗ
 		    						</div>
 		    					</a>
 		    					<div class="inner-navigation-border flex-grow-1">
 		    					</div>
 	    					</div>
 		    				<div class="box with-navigation">
-								<h3 class="fw-bold">Appearance</h3>
+								<h3 class="fw-bold">Εμφάνιση</h3>
 								<form th:action="|/${snapadmin_baseUrl}/settings|" method="POST">
-									<input type="hidden" name="next" value="settings/appearance">
-									<label for="additionalCss">Additional CSS</label>
-									<span class="m-0 p-0 text-muted">Additional CSS code that is added automatically to all pages</span>
+									<input type="hidden" name="next" value="snapadmin/settings/appearance">
+									<label for="additionalCss">Επιπρόσθετη CSS</label>
+									<span class="m-0 p-0 text-muted">Επιπρόσθετος κώδικας CSS που εφαρμόζεται αυτόματα σε όλες τις σελίδες</span>
 									<textarea class="form-control mt-2"  
 										id="additionalCss" name="additionalCss" rows="8"
 										th:text="${snapadmin_userConf.get('additionalCss')}"></textarea>
-									<button class="ui-btn btn btn-primary mt-3">Save</button>
+									<button class="ui-btn btn btn-primary mt-3">Αποθήκευση</button>
 								</form>						
 							</div>
 		    			</div>

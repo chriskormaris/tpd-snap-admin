@@ -7,13 +7,13 @@
     		<nav th:replace="~{snapadmin/fragments/resources :: navbar}"></nav>
 	        <div class="d-flex">
 	        	<div th:replace="~{snapadmin/fragments/resources :: sidebar('entities')}"></div>
-	        	<div class="main-content bg-lighter">
-					<h1 class="fw-bold mb-4"><i class="align-middle bi bi-database"></i><span class="align-middle"> Entities</span></h1>
+	        	<div class="main-content bg-lighter main-content-expanded">
+					<h1 class="fw-bold mb-4"><i class="align-middle bi bi-database"></i><span class="align-middle"> Πίνακες</span></h1>
 					<th:block th:if="${!snapadmin_authenticated}">
 						<div class="alert alert-danger alert-dismissible fade show" role="alert" id="auth-warning">
-							<h4 class="alert-heading fw-bold"><i class="bi bi-exclamation-triangle"></i> SnapAdmin is not protected</h4>
-							<p class="mb-0">It appears that you have not enabled security so SnapAdmin is publicly accessible. Please refer to the
-								documentation to learn how to <a href="https://www.snapadmin.dev/docs/#security">protect SnapAdmin with Spring Security.
+							<h4 class="alert-heading fw-bold"><i class="bi bi-exclamation-triangle"></i>Το SnapAdmin δεν προστατεύεται</h4>
+							<p class="mb-0">Φαίνεται πως δεν έχετε ενεργοποιήσει ασφάλεια, άρα το SnapAdmin είναι δημόσια προσβάσιμο. Παρακαλώ ανατρέξτε στο
+								documentation για να μάθετε πώς <a href="https://www.snapadmin.dev/docs/#security">να προστατέψετε το SnapAdmin με Spring Security.
 								</a>
 							</p>
 							<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -22,9 +22,9 @@
 					<form th:action="|/${snapadmin_baseUrl}|" method="GET">
     					<div class="input-group">
     						<input type="text" th:value="${query}"
-    						placeholder="Type a class or a table name and press ENTER to search" 
+    						placeholder="Πληκτρολογείστε μια κλάση ή έναν πίνακα και πατήστε ENTER για αναζήτηση"
     						class="ui-text-input form-control" name="query" autofocus>
-    						<button class="ui-btn btn btn-primary">Search</button>
+    						<button class="ui-btn btn btn-primary">Αναζήτηση</button>
     					</div>
     				</form>
 	        		<div class="row mt-4">
@@ -38,9 +38,9 @@
 		        					<table class="table table-striped mt-4 mb-3" th:if="${!schemas.isEmpty()}">
 			        					<tr>
 			        						<th></th>
-			        						<th>Table</th>
-			        						<th>Rows</th>
-			        						<th>Java class</th>
+			        						<th>Πίνακας</th>
+			        						<th>Γραμμές</th>
+			        						<th>Java κλάση</th>
 			        						<th></th>
 			        					</tr>
 			        					<tr th:each="schema : ${schemas.get(package)}">
@@ -62,7 +62,7 @@
 											</td>
 											<td class="text-end row-icons">
 												<a title="List all" th:href="|/${snapadmin_baseUrl}/model/${schema.getClassName()}|"><i class="bi bi-list"></i></a>
-												<a  th:title="|${!schema.isCreateEnabled() ? 'CREATE disabled for this type' : 'Create new item'}|" 
+												<a  th:title="|${!schema.isCreateEnabled() ? 'Το CREATE είναι απενεργοποιημένο για αυτόν τον τύπο' : 'Δημιουργία νέου αντικειμένου'}|"
 													th:class="|${!schema.isCreateEnabled() ? 'disable' : ''}|" 
 													th:href="|/${snapadmin_baseUrl}/model/${schema.getClassName()}/create|"><i class="bi bi-plus-square"></i>
 												</a>
@@ -71,13 +71,13 @@
 									</table>
 								
 									<div class="p-0 m-0" th:if="${schemas.isEmpty()}">
-										<p>No entities have been loaded from Java classes.</p>
+										<p>Δεν έχουν φορτωθεί πίνακες από τις Java κλάσεις.</p>
 										
 										<ul class="mt-3">
-											<li>Make sure you are initializing Snap Admin correctly and double check
-											that the package you have set in your <code>application.properties</code> is correct.</li>
-											<li>Check that the Java classes in the package have been correctly marked with 
-											the <code>@Entity</code> annotation.</li> 
+											<li>Βεβαιωθείτε ότι τρέχετε τον Snap Admin σωστά και ελέγξτε
+											ότι το όνομα του package που έχετε βάλει στο <code>application.properties</code> είναι σωστό.</li>
+											<li>Ελέγξτε ότι στις Java κλάσεις του package έχει προστεθεί
+											το <code>@Entity</code> annotation.</li>
 										</ul>
 									</div>
 								</th:block>

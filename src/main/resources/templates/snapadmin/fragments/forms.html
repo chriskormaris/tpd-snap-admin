@@ -8,7 +8,6 @@
 				autocomplete="off"
 				th:value="${value}"
 				placeholder="NULL">
-			</input>
 			<div class="suggestions d-none">
 			</div>
 		</div>
@@ -20,7 +19,6 @@
 					th:name="|${field.getName()}[]|"
 					th:data-fieldname="|${field.getName()}[]|"
 					th:data-classname="${field.getConnectedType().getName()}">
-				</input>
 				<div class="suggestions d-none">
 				</div>
 			</div>
@@ -72,14 +70,13 @@
 							<th:block th:if="${field.isForeignKey()}">
 								<span class="input-group-text w-25">
 									<input type="hidden" name="filter_op" value="string_eq">
-									Equals
+									Ίσον
 								</span>
 								<div class="autocomplete-input position-relative w-50">
 									<input class="autocomplete form-control" type="text"  name="filter_value"
 										th:data-classname="${field.getConnectedType().getName()}"
 										autocomplete="off"
 										placeholder="NULL">
-									</input>
 									<div class="suggestions d-none">
 									</div>
 								</div>
@@ -96,7 +93,7 @@
 											create=${create}, 
 											name='filter_value',
 											value=''
-										)}"></input>
+										)}">
 							</th:block>
 							<button class="ui-btn btn btn-primary"><i class="bi bi-search text-white"></i></button>
 						</div>

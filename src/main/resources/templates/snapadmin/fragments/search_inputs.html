@@ -10,7 +10,7 @@
 		 	(field.isReadOnly() && !create) ? 'disable' : ''}|"
 		
 		th:required="${!field.isNullable() && !field.isPrimaryKey()}"
-	></input>
+	>
 		
 	<input placeholder="NULL" th:fragment="char(field, create, name, value)"  
 		type="text" 
@@ -21,7 +21,7 @@
 		 	(field.isReadOnly() && !create) ? 'disable' : ''}|"
 		maxlength="1"
 		th:required="${!field.isNullable() && !field.isPrimaryKey()}"
-	></input>
+	>
 	
 	
 	<input placeholder="NULL" th:fragment="text(field, create, name, value)"  
@@ -33,7 +33,7 @@
 		 	(field.isReadOnly() && !create) ? 'disable' : ''}|"
 		
 		th:required="${!field.isNullable() && !field.isPrimaryKey()}"
-	></input>
+	>
 	
 	
 	<input placeholder="NULL" th:fragment="number(field, create, name, value)"  
@@ -46,7 +46,7 @@
 		
 		th:required="${!field.isNullable() && !field.isPrimaryKey()}"
 		th:step="${field.getStep()}"
-	></input>
+	>
 	
 	
 	<input placeholder="NULL" th:fragment="datetime(field, create, name, value)" 
@@ -58,7 +58,7 @@
 		 	(field.isReadOnly() && !create)) ? 'disable' : ''}|"
 		
 		th:required="${!field.isNullable() && !field.isPrimaryKey()}"
-	></input>
+	>
 	
 	
 	<th:block th:fragment="select(field, create, name, value)">
@@ -84,6 +84,6 @@
 		 	(field.isReadOnly() && !create)) ? 'disable' : ''}|"
 		
 		th:required="${!field.isNullable() && !field.isPrimaryKey()}"
-	></input>
+	>
 	
 </html>
