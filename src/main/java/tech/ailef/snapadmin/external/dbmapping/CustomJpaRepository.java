@@ -194,7 +194,7 @@ public class CustomJpaRepository extends SimpleJpaRepository {
 	        	try {
 	        		value = dbField.getType().parseValue(v);
 	        	} catch (Exception e) {
-	        		throw new SnapAdminException("Invalid value `" + v + "` specified for field `" + dbField.getName() + "`");
+	        		throw new SnapAdminException("Με έγκυρη τιμή `" + v + "` καθορισμένη για το πεδίο `" + dbField.getName() + "`");
 	        	}
         	}
         	
