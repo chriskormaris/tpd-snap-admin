@@ -32,7 +32,7 @@
 											<button th:class="|${!schema.isDeleteEnabled() ? 'disable' : ''}|"><i class="bi bi-trash"></i></button>
 										</form>
 										
-										<a th:title="|${!schema.isCreateEnabled() ? 'CREATE disabled for this type' : 'Create new item'}|" 
+										<a th:title="|${!schema.isCreateEnabled() ? 'Το CREATE είναι απενεργοποιημένο για αυτόν τον τύπο' : 'Δημιουργία νέου αντικειμένου'}|"
 											th:class="|${!schema.isCreateEnabled() ? 'disable' : ''}|"
 											th:href="|/${snapadmin_baseUrl}/model/${schema.getClassName()}/create|"><i class="bi bi-plus-square"></i></a>
 									</h3>

@@ -8,7 +8,7 @@
 	        <div class="d-flex">
 	        	<div th:replace="~{snapadmin/fragments/resources :: sidebar('entities')}"></div>
 	        	<div class="main-content bg-lighter">
-					<h1 class="fw-bold mb-4"><i class="align-middle bi bi-database"></i><span class="align-middle"> Entities</span></h1>
+					<h1 class="fw-bold mb-4"><i class="align-middle bi bi-database"></i><span class="align-middle"> Πίνακες</span></h1>
 					<th:block th:if="${!snapadmin_authenticated}">
 						<div class="alert alert-danger alert-dismissible fade show" role="alert" id="auth-warning">
 							<h4 class="alert-heading fw-bold"><i class="bi bi-exclamation-triangle"></i> SnapAdmin is not protected</h4>
@@ -24,7 +24,7 @@
     						<input type="text" th:value="${query}"
     						placeholder="Type a class or a table name and press ENTER to search" 
     						class="ui-text-input form-control" name="query" autofocus>
-    						<button class="ui-btn btn btn-primary">Search</button>
+    						<button class="ui-btn btn btn-primary">Αναζήτηση</button>
     					</div>
     				</form>
 	        		<div class="row mt-4">
@@ -38,9 +38,9 @@
 		        					<table class="table table-striped mt-4 mb-3" th:if="${!schemas.isEmpty()}">
 			        					<tr>
 			        						<th></th>
-			        						<th>Table</th>
-			        						<th>Rows</th>
-			        						<th>Java class</th>
+			        						<th>Πίνακας</th>
+			        						<th>Γραμμές</th>
+			        						<th>Java κλάση</th>
 			        						<th></th>
 			        					</tr>
 			        					<tr th:each="schema : ${schemas.get(package)}">
@@ -62,7 +62,7 @@
 											</td>
 											<td class="text-end row-icons">
 												<a title="List all" th:href="|/${snapadmin_baseUrl}/model/${schema.getClassName()}|"><i class="bi bi-list"></i></a>
-												<a  th:title="|${!schema.isCreateEnabled() ? 'CREATE disabled for this type' : 'Create new item'}|" 
+												<a  th:title="|${!schema.isCreateEnabled() ? 'Το CREATE είναι απενεργοποιημένο για αυτόν τον τύπο' : 'Δημιουργία νέου αντικειμένου'}|"
 													th:class="|${!schema.isCreateEnabled() ? 'disable' : ''}|" 
 													th:href="|/${snapadmin_baseUrl}/model/${schema.getClassName()}/create|"><i class="bi bi-plus-square"></i>
 												</a>
