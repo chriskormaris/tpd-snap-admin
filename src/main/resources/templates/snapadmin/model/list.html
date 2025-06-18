@@ -10,16 +10,15 @@
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h1 class="modal-title fs-5" id="csvExportModalLabel">Export settings</h1>
+							<h1 class="modal-title fs-5" id="csvExportModalLabel">Ρυθμίσεις εξαγωγής</h1>
 							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 						</div>
 						<div class="modal-body">
 							<div class="container-fluid">
-								<p class="text-muted">The export file will contain all the pages in the results. If the table is big,
-								this might take some time.</p>
+								<p class="text-muted">Το αρχείο εξαγωγής περιλαμβάνει όλες τις σελίδες στα αποτελέσματα.
+								Αν ο πίνακας είναι μεγάλος, ίσως αργήσει λίγο.</p>
 								
-								
-								<h5 class="fw-bold">Include columns</h5>
+								<h5 class="fw-bold">Συμπερίληψη στηλών</h5>
 								<div th:each="field : ${schema.getSortedFields()}" th:if="${field.isExportable()}">
 									<div class="form-check">
 										<input class="form-check-input" type="checkbox" 
@@ -43,14 +42,14 @@
 									</div>
 								</div>
 								<div th:if="${!activeFilters.isEmpty()}">
-									<h5 class="fw-bold mt-3 mb-0">Active filters</h5>
-									<p class="text-muted">Remove them from the right sidebar.</p>
+									<h5 class="fw-bold mt-3 mb-0">Ενεργά φίλτρα</h5>
+									<p class="text-muted">Αφαίρεση από τη δεξιά μπάρα.</p>
 									<div th:each="filter : ${activeFilters}">
 										<span class="active-filter badge bg-primary me-1 mb-2 p-2 font-monospace noselect">
 											[[ ${filter}]]
 										</span>
 									</div>
-									<!--/*--> Propagate query filters with hidden fields <!--*/-->
+									<!--/*--> Διάδοση φίλτρων ερωτήματος SQL με κρυφά πεδία <!--*/-->
 					                <th:block th:each="filter : ${activeFilters}">
 					                	<input type="hidden"
 					                		name="filter_field" 
@@ -63,7 +62,7 @@
 					                		th:value="${filter.getValue()}"> 
 					                </th:block>
 								</div>
-								<h5 class="fw-bold mt-3">Export format</h3>
+								<h5 class="fw-bold mt-3">Μορφή εξαγωγής</h5>
 								<select name="format" class="form-select">
 									<option th:each="format : ${T(tech.ailef.snapadmin.external.dto.DataExportFormat).values()}"
 										th:value="${format}" th:text="${format}">
@@ -74,19 +73,19 @@
 										id="__check_raw"
 										th:name="raw">
 									<label class="form-check-label" for="__check_raw">
-								    	Export raw values
+								    	Εξαγωγή πραγματικών τιμών
 									</label>
 									<p class="text-muted">
-										Whether to export the raw values as they appear in the database table
-										or to perform the default processing (e.g., formatting and foreign key
-										resolution) and export what you see with the web interface.
+										Αν θέλετε να εξάγετε τις πραγματικές τιμές όπως εμφανίζονται στον πίνακα της βάσης
+										ή αν θέλετε να εκτελέσετε την προκαθορισμένη επεξεργασία (π.χ. μορφοποίηση
+										και ανάλυση ξένου κλειδιού) και να εξάγετε αυτό που βλέπετε στην ιστοσελίδα.
 									</p>
 								</div>
 							</div>
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-							<button type="submit" class="btn btn-primary">Export [[ ${page.getPagination().getMaxElement()} ]] rows</button>
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ακύρωση</button>
+							<button type="submit" class="btn btn-primary">Εξαγωγή [[ ${page.getPagination().getMaxElement()} ]] γραμμών</button>
 						</div>
 					</div>
 				</div>
@@ -99,24 +98,24 @@
 			<nav th:replace="~{snapadmin/fragments/resources :: navbar}"></nav>
 		    <div class="d-flex">
 		    	<div th:replace="~{snapadmin/fragments/resources :: sidebar('entities')}"></div>
-		    	<div class="main-content bg-lighter">
+		    	<div class="main-content bg-lighter main-content-expanded">
 		    		<th:block th:replace="~{snapadmin/fragments/resources :: alerts}"></th:block>
 					<h1 class="fw-bold mb-4"><i class="align-middle bi bi-database"></i>
-						<span class="align-middle"><a th:href="|/${snapadmin_baseUrl}|">Entities</a></span> 
+						<span class="align-middle"><a th:href="|/${snapadmin_baseUrl}|">Πίνακες</a></span>
 						<i class="align-middle bi bi-chevron-double-right"></i> 
 						<span class="align-middle"> [[ ${schema.getJavaClass().getSimpleName()} ]] </span>
 					</h1>
 		    		<div class="row mt-4">
-		    			<div th:class="${schema.getFilterableFields().isEmpty() ? 'col' : 'col-9'}">
+		    			<div class="col" id="table-div">
 	    					<div class="w-100 d-flex inner-navigation">
 	    						<a th:href="|/${snapadmin_baseUrl}/model/${className}|" class="active">
 		    						<div class="ui-tab ps-5 pe-5 p-3">
-		    							<i class="bi bi-database pe-2"></i> DATA
+		    							<i class="bi bi-database pe-2"></i> ΔΕΔΟΜΕΝΑ
 		    						</div>
 		    					</a>
 		    					<a th:href="|/${snapadmin_baseUrl}/model/${className}/schema|">
 		    						<div class="ui-tab ps-5 pe-5 p-3">
-		    							<i class="bi bi-table pe-2"></i> SCHEMA
+		    							<i class="bi bi-table pe-2"></i> ΣΧΗΜΑ
 		    						</div>
 		    					</a>
 		    					<div class="inner-navigation-border flex-grow-1">
@@ -127,9 +126,9 @@
 			    					<div class="input-group">
 			    						<span class="input-group-text"><i class="bi bi-search"></i></span>
 			    						<input type="text" th:value="${query}"
-			    						placeholder="Type and press ENTER to search" 
+			    						placeholder="Πατήστε ENTER για αναζήτηση"
 			    						class="ui-text-input form-control" name="query" autofocus>
-			    						<button class="ui-btn btn btn-primary">Search</button>
+			    						<button class="ui-btn btn btn-primary">Αναζήτηση</button>
 			    					</div>
 			    					<th:block th:each="queryParam : ${snapadmin_queryParams.keySet()}">
 										<input th:each="paramValue : ${snapadmin_queryParams.get(queryParam)}"
@@ -142,7 +141,7 @@
 										th:value="${page != null ? page.getPagination().getPageSize() : '50'}">
 			    				</form>
 								<div class="separator mb-4 mt-4"></div>
-							
+
 		    					<div class="d-flex justify-content-between">
 		    					
 		    					
@@ -151,14 +150,18 @@
 										<span title="Database table name" class="ms-3 label label-primary label-gray font-monospace">
 											[[ ${schema.getTableName()} ]]
 										</span>
-										<button th:if="${schema.isExportEnabled()}" title="Open export data window" type="button" 
+										<button th:if="${schema.isExportEnabled()}" title="Άνοιγμα παραθύρου εξαγωγής δεδομένων" type="button"
 											class="btn"  data-bs-toggle="modal" data-bs-target="#csvExportModal">
 											<i class="bi bi-file-earmark-spreadsheet export-icon" style="font-size: 1.5rem;"></i>
+										</button>
+										<button th:if="${!schema.getFilterableFields().isEmpty()}"
+												class="ui-btn btn btn-primary" id="show-hide-filters">
+											Εμφάνιση Φίλτρων
 										</button>
 									</h3>
 									
 									<h3 class="create-button">
-										<a th:title="|${!schema.isCreateEnabled() ? 'CREATE disabled for this type' : 'Create new item'}|" 
+										<a th:title="|${!schema.isCreateEnabled() ? 'Το CREATE είναι απενεργοποιημένο για αυτόν τον τύπο' : 'Δημιουργία νέου αντικειμένου'}|"
 											th:class="|${!schema.isCreateEnabled() ? 'disable' : ''}|"
 											th:href="|/${snapadmin_baseUrl}/model/${schema.getClassName()}/create|"><i class="bi bi-plus-square"></i></a>
 									</h3>
@@ -170,14 +173,14 @@
 								</th:block>
 							</div>
 		    			</div>
-		    			<div th:if="${!schema.getFilterableFields().isEmpty()}" class="col-3">
-							<div class="box filterable-fields">
-								<h3 class="fw-bold mb-3"><i class="bi bi-funnel"></i> Filters</h3>
-								
+		    			<div th:if="${!schema.getFilterableFields().isEmpty()}" id="filters-div">
+							<div class="box filterable-fields d-none">
+								<h3 class="fw-bold mb-3"><i class="bi bi-funnel"></i> Φίλτρα</h3>
+
 								<div class="mb-2">
 									<div th:each="filter : ${activeFilters}">
 									
-										<span title="Click to remove this filter" 
+										<span title="Πατήστε για να αφαιρέσετε αυτό το φίλτρο"
 											class="active-filter badge bg-primary me-1 mb-2 p-2 font-monospace cursor-pointer noselect"
 											th:data-formid="${filter.toString()}"
 											>
@@ -192,13 +195,6 @@
 											<input type="hidden" name="remove_value" th:value="${filter.getValue()}">
 										</form>
 									</div>
-										
-										
-										
-										
-										
-										
-										
 								</div>
 								
 								<th:block th:each="field : ${schema.getFilterableFields()}">

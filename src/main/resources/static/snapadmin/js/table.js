@@ -4,12 +4,12 @@ function updateBulkActions(table, selected) {
 	let divs = document.querySelectorAll(".bulk-actions");
 	divs.forEach(div => {
 		if (deleteEnabled === "true") {
-			div.innerHTML = `${selected} items selected 
+			div.innerHTML = `${selected} επιλεγμένα αντικείμενα
 				<input type="submit" form="multi-delete-form" 
-					class="ui-btn btn btn-secondary ${deleteEnabled === "false" ? 'disable' : ''} " value="Delete">`;
+					class="ui-btn btn btn-secondary ${deleteEnabled === "false" ? 'disable' : ''} " value="Διαγραφή">`;
 		} else {
 			
-			div.innerHTML = `<p class=" badge bg-secondary text-white m-0 mt-2">DELETE not allowed on this table</p>`;
+			div.innerHTML = `<p class=" badge bg-secondary text-white m-0 mt-2">Το DELETE δεν επιτρέπεται σε αυτόν τον πίνακα</p>`;
 		}
 	});
 }
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	document.querySelectorAll(".delete-form").forEach(form => {
 		form.addEventListener('submit', function(e) {
-			if (!confirm('Are you sure you want to delete this item?')) {
+			if (!confirm('Είστε σίγουροι ότι θέλετε να διαγράψετε αυτό το αντικείμενο?')) {
 				e.preventDefault();
 			}
 		});
@@ -29,11 +29,11 @@ document.addEventListener("DOMContentLoaded", () => {
 		document.getElementById('multi-delete-form').addEventListener('submit', function(e) {
 			if (selected == 0) {
 				e.preventDefault();
-				alert('No items selected');
+				alert('Δεν έχει επιλεγεί αντικείμενο');
 				return;
 			}
 			
-			if (!confirm('Are you sure you want to delete these items?')) {
+			if (!confirm('Είστε σίγουροι ότι θέλετε να διαγράψετε αυτά τα αντικείμενα?')) {
 				e.preventDefault();
 			}
 		});
@@ -74,10 +74,12 @@ document.addEventListener("DOMContentLoaded", () => {
 	});
 	
 	if (document.querySelector("div.table-selectable select.page-size") != null) {
-		document.querySelector("div.table-selectable select.page-size").addEventListener('change', function(e) {
-			this.parentElement.querySelector("input[name=\"pageSize\"]").value = e.target.value;
-			this.parentElement.submit();
-		});
+		document.querySelectorAll("div.table-selectable select.page-size").forEach(e => {
+            e.addEventListener('change', function(e) {
+                this.parentElement.querySelector("input[name=\"pageSize\"]").value = e.target.value;
+                this.parentElement.submit();
+		    });
+        });
 	}
 	
 });
