@@ -22,6 +22,7 @@ package tech.ailef.snapadmin.external.controller;
 import java.security.Principal;
 import java.util.Map;
 
+import oracle.jdbc.OracleDatabaseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -43,6 +44,9 @@ import tech.ailef.snapadmin.internal.UserConfiguration;
 @ControllerAdvice
 public class GlobalController {
 
+	private static final String FOREIGN_KEY_CONSTRAINT_NOT_FOUND_ERROR_MESSAGE =
+			"Δεν υπάρχει ξένο κλειδί με αυτό το id";
+
 	@Autowired
 	private SnapAdminProperties props;
 
@@ -51,7 +55,7 @@ public class GlobalController {
 	
 	@Autowired
 	private SnapAdmin snapAdmin;
-	
+
 	@ExceptionHandler(SnapAdminException.class)
 	public String handleException(Exception e, Model model, HttpServletResponse response) {
 		model.addAttribute("status", "");
@@ -76,7 +80,26 @@ public class GlobalController {
 		response.setStatus(404);
 		return "snapadmin/other/error";
 	}
-	
+
+	@ExceptionHandler(OracleDatabaseException.class)
+	public String handleOracleDatabaseException(Exception e, Model model, HttpServletResponse response) {
+		model.addAttribute("error", "Σφάλμα");
+		if (e.getMessage().contains("parent key not found")) {
+			model.addAttribute("status", "404");
+			model.addAttribute("message", FOREIGN_KEY_CONSTRAINT_NOT_FOUND_ERROR_MESSAGE);
+			response.setStatus(404);
+		} else {
+			model.addAttribute("status", "500");
+			model.addAttribute("message", e.getMessage());
+			response.setStatus(500);
+		}
+		model.addAttribute("snapadmin_userConf", userConf);
+		model.addAttribute("snapadmin_baseUrl", getBaseUrl());
+		model.addAttribute("snapadmin_version", snapAdmin.getVersion());
+		model.addAttribute("snapadmin_properties", props);
+		return "snapadmin/other/error";
+	}
+
 	@ModelAttribute("snapadmin_version")
 	public String getVersion() {
 		return snapAdmin.getVersion();
