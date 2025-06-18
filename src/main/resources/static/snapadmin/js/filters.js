@@ -1,7 +1,45 @@
 document.addEventListener("DOMContentLoaded", () => {
 	let rootElements = document.querySelectorAll('.filterable-fields');
-	
-	
+	let dataGrid = document.getElementById('table-div');
+	let filtersDiv = document.getElementById('filters-div');
+	let showHideFiltersButton = document.getElementById('show-hide-filters');
+
+    function hideFilters() {
+        rootElements[0].classList.remove('d-block');
+        rootElements[0].classList.add('d-none');
+        dataGrid.classList.remove('col-9');
+        dataGrid.classList.add('col');
+        filtersDiv.classList.remove('col-3');
+        showHideFiltersButton.innerHTML = 'Εμφάνιση Φίλτρων';
+        localStorage.setItem("hidden_filters", "true");
+    }
+
+	function showFilters() {
+        rootElements[0].classList.remove('d-none');
+        rootElements[0].classList.add('d-block');
+        dataGrid.classList.remove('col');
+        dataGrid.classList.add('col-9');
+        filtersDiv.classList.add('col-3');
+        showHideFiltersButton.innerHTML = 'Απόκρυψη Φίλτρων';
+        localStorage.setItem("hidden_filters", "false");
+	}
+
+    if (localStorage.getItem("hidden_filters") == "true") {
+        hideFilters();
+    } else if (localStorage.getItem("hidden_filters") == "false") {
+        showFilters();
+    }
+
+    if (showHideFiltersButton != null) {
+        showHideFiltersButton.addEventListener('click', function(e) {
+            if (!localStorage.getItem("hidden_filters") || localStorage.getItem("hidden_filters") == "false") {
+                hideFilters();
+            } else if (localStorage.getItem("hidden_filters") == "true") {
+                showFilters();
+            }
+        });
+    }
+
 	rootElements.forEach(root => {
 		let fields = root.querySelectorAll('.filterable-field');
 
@@ -12,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				document.getElementById(formId).submit();
 			});
 		});
-	
+
 		fields.forEach(field => {
 			field.querySelector(".card-header").addEventListener('click', function(e) {
 				if (field.querySelector(".card-body").classList.contains('d-none')) {

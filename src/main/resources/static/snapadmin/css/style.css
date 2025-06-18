@@ -335,6 +335,9 @@ span.input-group-text {
 	width: 5%;
 }
 
+button#expand-collapse-sidebar {
+    width: 200px;
+}
 
 @media (max-width: 767px) {
 	div.sidebar {
