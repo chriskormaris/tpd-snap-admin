@@ -10,7 +10,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>tech.ailef</groupId>
-	<artifactId>snap-admin</artifactId>
+	<artifactId>tpd-snap-admin</artifactId>
 	<version>0.2.2</version>
 	<name>SnapAdmin</name>
 	<description>SnapAdmin is an auto-generated CRUD admin panel for Spring Boot/JPA apps</description>
@@ -145,6 +145,22 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle.database.jdbc</groupId>
+			<artifactId>ojdbc11</artifactId>
+			<version>23.8.0.25.04</version>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.38</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.lytrax</groupId>
+			<artifactId>lytrax-afm</artifactId>
+			<version>1.0.1</version>
 		</dependency>
 	</dependencies>
 </project>
