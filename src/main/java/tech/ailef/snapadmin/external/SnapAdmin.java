@@ -19,24 +19,6 @@
 
 package tech.ailef.snapadmin.external;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
-import org.springframework.core.type.filter.AnnotationTypeFilter;
-import org.springframework.stereotype.Component;
-
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -50,6 +32,13 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.core.type.filter.AnnotationTypeFilter;
+import org.springframework.stereotype.Component;
 import tech.ailef.snapadmin.external.annotations.Disable;
 import tech.ailef.snapadmin.external.annotations.DisplayFormat;
 import tech.ailef.snapadmin.external.dbmapping.CustomJpaRepository;
@@ -64,6 +53,16 @@ import tech.ailef.snapadmin.external.exceptions.SnapAdminException;
 import tech.ailef.snapadmin.external.exceptions.SnapAdminNotFoundException;
 import tech.ailef.snapadmin.external.exceptions.UnsupportedFieldTypeException;
 import tech.ailef.snapadmin.external.misc.Utils;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * The main SnapAdmin class is responsible for the initialization phase. This class scans
@@ -88,7 +87,7 @@ public class SnapAdmin {
 	
 	private boolean authenticated;
 	
-	private static final String VERSION = "0.2.0";
+	private static final String VERSION = "0.2.3";
     
     /**
 	 * Builds the SnapAdmin instance by scanning the `@Entity` beans and loading
@@ -262,20 +261,24 @@ public class SnapAdmin {
 	}
 	
 	/**
-	 * Determines if a field is nullable from the `@Column` annotation
+	 * Determines if a field is nullable from the `@Column` or `@JoinColumn` annotation
 	 * @param f
 	 * @return
 	 */
 	private boolean determineNullable(Field f) {
 		Column[] columnAnnotations = f.getAnnotationsByType(Column.class);
-
-		boolean nullable = true;
 		if (columnAnnotations.length != 0) {
 			Column col = columnAnnotations[0];
-			nullable = col.nullable();
+			return col.nullable();
 		}
-		
-		return nullable;
+
+		JoinColumn[] joinColumnAnnotations = f.getAnnotationsByType(JoinColumn.class);
+		if (joinColumnAnnotations.length != 0) {
+			JoinColumn joinCol = joinColumnAnnotations[0];
+			return joinCol.nullable();
+		}
+
+		return true;
 	}
 	
 	/**

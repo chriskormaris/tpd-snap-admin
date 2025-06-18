@@ -19,6 +19,23 @@
 
 package tech.ailef.snapadmin.external.dbmapping;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.CriteriaUpdate;
+import jakarta.persistence.criteria.Path;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
+import org.springframework.web.multipart.MultipartFile;
+import tech.ailef.snapadmin.external.dbmapping.fields.DbField;
+import tech.ailef.snapadmin.external.dbmapping.fields.StringFieldType;
+import tech.ailef.snapadmin.external.dbmapping.fields.TextFieldType;
+import tech.ailef.snapadmin.external.dto.CompareOperator;
+import tech.ailef.snapadmin.external.dto.QueryFilter;
+import tech.ailef.snapadmin.external.exceptions.SnapAdminException;
+
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -28,24 +45,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
-import org.springframework.web.multipart.MultipartFile;
-
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.Query;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.CriteriaUpdate;
-import jakarta.persistence.criteria.Path;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
-import tech.ailef.snapadmin.external.dbmapping.fields.DbField;
-import tech.ailef.snapadmin.external.dbmapping.fields.StringFieldType;
-import tech.ailef.snapadmin.external.dbmapping.fields.TextFieldType;
-import tech.ailef.snapadmin.external.dto.CompareOperator;
-import tech.ailef.snapadmin.external.dto.QueryFilter;
-import tech.ailef.snapadmin.external.exceptions.SnapAdminException;
 
 @SuppressWarnings("rawtypes")
 public class CustomJpaRepository extends SimpleJpaRepository {
@@ -144,7 +143,7 @@ public class CustomJpaRepository extends SimpleJpaRepository {
 				}
 			}
 			
-			if (field.getConnectedSchema() != null)
+			if (field.getConnectedSchema() != null && value != null)
 				value = field.getConnectedSchema().getJpaRepository().findById(value).get();
 			
 			update.set(root.get(field.getJavaName()), value);
@@ -194,7 +193,7 @@ public class CustomJpaRepository extends SimpleJpaRepository {
 	        	try {
 	        		value = dbField.getType().parseValue(v);
 	        	} catch (Exception e) {
-	        		throw new SnapAdminException("Invalid value `" + v + "` specified for field `" + dbField.getName() + "`");
+	        		throw new SnapAdminException("Με έγκυρη τιμή `" + v + "` καθορισμένη για το πεδίο `" + dbField.getName() + "`");
 	        	}
         	}
         	
