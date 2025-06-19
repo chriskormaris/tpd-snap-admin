@@ -1,4 +1,4 @@
-package local.tpd.oracle;
+package local.tpd.database;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -25,7 +25,7 @@ import java.util.Properties;
 @EnableConfigurationProperties(SnapAdminProperties.class)
 @Configuration
 @EnableTransactionManagement
-public class OracleConfiguration {
+public class DatabaseConfiguration {
 
     @Autowired
     private SnapAdminProperties snapAdminProperties;
@@ -37,7 +37,7 @@ public class OracleConfiguration {
     private JpaProperties jpaProperties;
 
     @Bean
-    DataSource oracleDataSource() {
+    DataSource databaseDataSource() {
         DataSourceBuilder<?> dataSourceBuilder = DataSourceBuilder.create();
         dataSourceBuilder.driverClassName(dataSourceProperties.getDriverClassName());
         dataSourceBuilder.url(dataSourceProperties.getUrl());
@@ -49,10 +49,10 @@ public class OracleConfiguration {
 
     @Bean
     @Primary
-    LocalContainerEntityManagerFactoryBean oracleEntityManagerFactory() {
+    LocalContainerEntityManagerFactoryBean databaseEntityManagerFactory() {
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
-        factoryBean.setDataSource(oracleDataSource());
-        factoryBean.setPersistenceUnitName("oracle");
+        factoryBean.setDataSource(databaseDataSource());
+        factoryBean.setPersistenceUnitName("database");
         factoryBean.setPackagesToScan(snapAdminProperties.getModelsPackage());
         factoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
         Properties properties = new Properties();
@@ -65,7 +65,7 @@ public class OracleConfiguration {
     @Bean
     TransactionManager transactionManager() {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(oracleEntityManagerFactory().getObject());
+        transactionManager.setEntityManagerFactory(databaseEntityManagerFactory().getObject());
         return transactionManager;
     }
 

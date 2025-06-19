@@ -1,14 +1,14 @@
 package tech.ailef.snapadmin;
 
 
-import local.tpd.oracle.OracleConfiguration;
+import local.tpd.database.DatabaseConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import tech.ailef.snapadmin.external.SnapAdminAutoConfiguration;
 
 @SpringBootApplication
-@ImportAutoConfiguration({SnapAdminAutoConfiguration.class, OracleConfiguration.class})
+@ImportAutoConfiguration({SnapAdminAutoConfiguration.class, DatabaseConfiguration.class})
 public class SnapAdminProjectApplication {
 
 	public static void main(String[] args) {
