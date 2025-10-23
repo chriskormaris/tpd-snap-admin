@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="~{snapadmin/fragments/resources::head}">
+</head>
+<body>
+    <div class="bg-light main-wrapper">
+        <div class="d-flex">
+            <div class="row mt-4">
+                <div class="col">
+                    <form method="POST" th:action="|/${snapadmin_baseUrl}/|" accept-charset="UTF-8">
+                        <label>Username:
+                            <input type="text" name="user" />
+                        </label>
+                        <label>Password:
+                            <input type="password" name="pass" />
+                        </label>
+                        <input type="submit" value="Login" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -128,8 +128,7 @@ public class GlobalController {
 	
 	@ModelAttribute("snapadmin_authenticated") 
 	public boolean isAuthenticated() {
-		// return snapAdmin.isAuthenticated();
-		return true;
+		return snapAdmin.isAuthenticated();
 	}
 	
 	@ModelAttribute("snapadmin_authenticatedUser")
