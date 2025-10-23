@@ -44,9 +44,9 @@
 				&nbsp;
 	        	[[ ${snapadmin_userConf.get('brandName')} ]]
 	        </a>
-<!--	        <div th:if="${snapadmin_authenticated}" class="d-flex align-items-center p-2" id="current-user">-->
-<!--    			<i class="bi bi-person-circle me-2"></i> [[ ${snapadmin_authenticatedUser} ]]-->
-<!--	        </div>-->
+	        <div class="d-flex align-items-center p-2" id="current-user">
+    			<a class="bi bi-person-circle me-2" th:href="|/${snapadmin_baseUrl}/login|"> [[ ${snapadmin_authenticatedUser} ]] </a>
+	        </div>
 	    </div>
 	</nav>
     <div class="sidebar position-relative sidebar-collapsed" th:fragment="sidebar(page)">

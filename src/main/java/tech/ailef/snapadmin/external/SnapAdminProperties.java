@@ -51,7 +51,7 @@ public class SnapAdminProperties {
 	 * Whether the SQL console feature is enabled
 	 */
 	private boolean sqlConsoleEnabled = true;
-	
+
 	/**
 	 * Whether SnapAdmin is enabled
 	 * @return
@@ -103,7 +103,7 @@ public class SnapAdminProperties {
 	public void setTestMode(boolean testMode) {
 		this.testMode = testMode;
 	}
-	
+
 //	public Map<String, String> toMap() {
 //		Map<String, String> conf = new HashMap<>();
 //		conf.put("enabled", enabled + "");
