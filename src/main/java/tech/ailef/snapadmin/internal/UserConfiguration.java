@@ -62,7 +62,7 @@ public class UserConfiguration {
 	 */
 	private Map<String, String> defaultValues() {
 		Map<String, String> values = new HashMap<>();
-		values.put("brandName", "TPD Admin");
+		values.put("brandName", "TPD Snap Admin");
 		values.put("additionalCss", "");
 		return values;
 	}

@@ -47,9 +47,7 @@ public class LdapServiceImpl implements LdapService {
             log.info("LDAP authentication for " + user + " succeeded!");
         } catch (Exception ex) {
             // Not authenticated
-            // ex.printStackTrace();
-            // result = false;
-            // log.error("LDAP authentication for " + user + " failed!");
+            log.error("LDAP authentication for " + user + " failed!", ex);
             throw new SnapAdminException("LDAP authentication for " + user + " failed!", ex);
         }
 
