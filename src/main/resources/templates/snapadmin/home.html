@@ -9,16 +9,16 @@
 	        	<div th:replace="~{snapadmin/fragments/resources :: sidebar('entities')}"></div>
 	        	<div class="main-content bg-lighter main-content-expanded">
 					<h1 class="fw-bold mb-4"><i class="align-middle bi bi-database"></i><span class="align-middle"> Πίνακες</span></h1>
-<!--					<th:block th:if="${!snapadmin_authenticated}">-->
-<!--						<div class="alert alert-danger alert-dismissible fade show" role="alert" id="auth-warning">-->
-<!--							<h4 class="alert-heading fw-bold"><i class="bi bi-exclamation-triangle"></i>Το SnapAdmin δεν προστατεύεται</h4>-->
-<!--							<p class="mb-0">Φαίνεται πως δεν έχετε ενεργοποιήσει ασφάλεια, άρα το SnapAdmin είναι δημόσια προσβάσιμο. Παρακαλώ ανατρέξτε στο-->
-<!--								documentation για να μάθετε πώς <a href="https://www.snapadmin.dev/docs/#security">να προστατέψετε το SnapAdmin με Spring Security.-->
-<!--								</a>-->
-<!--							</p>-->
-<!--							<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
-<!--						</div>-->
-<!--					</th:block>-->
+					<th:block th:if="${!snapadmin_authenticated}">
+						<div class="alert alert-danger alert-dismissible fade show" role="alert" id="auth-warning">
+							<h4 class="alert-heading fw-bold"><i class="bi bi-exclamation-triangle"></i>Το SnapAdmin δεν προστατεύεται</h4>
+							<p class="mb-0">Φαίνεται πως δεν έχετε ενεργοποιήσει ασφάλεια, άρα το SnapAdmin είναι δημόσια προσβάσιμο. Παρακαλώ ανατρέξτε στο
+								documentation για να μάθετε πώς <a href="https://www.snapadmin.dev/docs/#security">να προστατέψετε το SnapAdmin με Spring Security.
+								</a>
+							</p>
+							<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+						</div>
+					</th:block>
 					<form th:action="|/${snapadmin_baseUrl}|" method="GET">
     					<div class="input-group">
     						<input type="text" th:value="${query}"

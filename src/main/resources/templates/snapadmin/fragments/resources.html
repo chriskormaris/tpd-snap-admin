@@ -45,16 +45,30 @@
 	        	[[ ${snapadmin_userConf.get('brandName')} ]]
 	        </a>
 	        <div class="d-flex align-items-center p-2" id="current-user">
-    			<a class="bi bi-person-circle me-2" th:href="|/${snapadmin_baseUrl}/login|"> [[ ${snapadmin_authenticatedUser} ]] </a>
+                <th:block th:if="${snapadmin_authenticated == null || !snapadmin_authenticated}">
+                    <form method="GET" th:action="|/${snapadmin_baseUrl}/login|" accept-charset="UTF-8">
+                        <button class="btn btn-primary"/>
+                            <i class="bi bi-person-circle me-2" style="color: white;"></i> Σύνδεση
+                        </button>
+                    </form>
+                </th:block>
+                <th:block th:if="${snapadmin_authenticated}">
+                    <span style="color: white;">[[ ${snapadmin_authenticatedUser} ]]&nbsp;</span>
+                    <form method="POST" th:action="|/${snapadmin_baseUrl}/logout|" accept-charset="UTF-8">
+                        <button class="btn btn-primary"/>
+                            <i class="bi bi-person-circle me-2" style="color: white;"></i> Αποσύνδεση
+                        </button>
+                    </form>
+                </th:block>
 	        </div>
 	    </div>
 	</nav>
-    <div class="sidebar position-relative sidebar-collapsed" th:fragment="sidebar(page)">
+    <div class="sidebar position-relative sidebar-collapsed" th:fragment="sidebar(page)" style="top: 20px;">
     	<div class="sidebar-top sidebar-collapsed">
         	<h6 class="fw-bold pt-2 ms-3 menu-subheading d-none d-md-block d-md-none">ΚΑΤΑΛΟΓΟΣ</h6>
         	<ul class="sidebar-menu pb-0 mb-0 ">
         		<li th:class="${#strings.equals(activePage, 'entities') ? 'active' : ''}">
-    				<a th:href="|/${snapadmin_baseUrl}|">
+    				<a th:href="|/${snapadmin_baseUrl}/entities|">
 	        			<div class="d-flex align-items-center">
 	        				<div class="menu-icon">
 	        					<i class="bi bi-database"></i>
@@ -236,7 +250,7 @@
 					  		<option th:selected="${page.getPagination().getPageSize() == 200}">200</option>
 					  	</select>
 					</form>
-				</div> 
+				</div>
 				<p class="m-0 p-0">
 					<i>Εμφανίζονται [[ ${page.getNumberOfResults()} ]] από [[ ${page.getPagination().getMaxElement()} ]] αποτελέσματα</i>
 				</p>

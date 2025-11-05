@@ -133,7 +133,9 @@ public class GlobalController {
 	
 	@ModelAttribute("snapadmin_authenticatedUser")
 	public String authenticatedUser(Principal principal) {
-		if (principal == null) return null;
-		return principal.getName();
+		// if (principal == null) return null;
+		// return principal.getName();
+        return snapAdmin.getUsername();
 	}
+
 }

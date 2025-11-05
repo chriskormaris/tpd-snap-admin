@@ -115,28 +115,62 @@ public class SnapAdminController {
 	 */
 	@GetMapping
 	public String index(Model model, @RequestParam(required = false) String query) {
-		List<DbObjectSchema> schemas = snapAdmin.getSchemas();
-		if (query != null && !query.isBlank()) {
-			schemas = schemas.stream().filter(s -> {
-				return s.getClassName().toLowerCase().contains(query.toLowerCase())
-					|| s.getTableName().toLowerCase().contains(query.toLowerCase());
-			}).collect(Collectors.toList());
-		}
-		
-		Map<String, List<DbObjectSchema>> groupedBy = 
-			schemas.stream().collect(Collectors.groupingBy(s -> s.getBasePackage()));
-		
-		Map<String, Long> counts = 
-			schemas.stream().collect(Collectors.toMap(s -> s.getClassName(), s -> repository.count(s)));
-		
-		model.addAttribute("schemas", groupedBy);
-		model.addAttribute("query", query);
-		model.addAttribute("counts", counts);
-		model.addAttribute("activePage", "entities");
-		model.addAttribute("title", "Πίνακες | Index");
-		
-		return "snapadmin/home";
+        if (snapAdmin.isAuthenticated()) {
+            List<DbObjectSchema> schemas = snapAdmin.getSchemas();
+            if (query != null && !query.isBlank()) {
+                schemas = schemas.stream().filter(s -> {
+                    return s.getClassName().toLowerCase().contains(query.toLowerCase())
+                            || s.getTableName().toLowerCase().contains(query.toLowerCase());
+                }).collect(Collectors.toList());
+            }
+
+            Map<String, List<DbObjectSchema>> groupedBy =
+                    schemas.stream().collect(Collectors.groupingBy(s -> s.getBasePackage()));
+
+            Map<String, Long> counts =
+                    schemas.stream().collect(Collectors.toMap(s -> s.getClassName(), s -> repository.count(s)));
+
+            model.addAttribute("schemas", groupedBy);
+            model.addAttribute("query", query);
+            model.addAttribute("counts", counts);
+            model.addAttribute("activePage", "entities");
+            model.addAttribute("title", "Πίνακες | Index");
+
+            return "snapadmin/home";
+        } else {
+            model.addAttribute("title", "Σύνδεση");
+            return "snapadmin/login";
+        }
 	}
+
+    @GetMapping("/entities")
+    public String entities(Model model, @RequestParam(required = false) String query) {
+        if (!snapAdmin.isAuthenticated()) {
+            return "redirect:/" + properties.getBaseUrl() + "/unauthorized";
+        }
+
+        List<DbObjectSchema> schemas = snapAdmin.getSchemas();
+        if (query != null && !query.isBlank()) {
+            schemas = schemas.stream().filter(s -> {
+                return s.getClassName().toLowerCase().contains(query.toLowerCase())
+                        || s.getTableName().toLowerCase().contains(query.toLowerCase());
+            }).collect(Collectors.toList());
+        }
+
+        Map<String, List<DbObjectSchema>> groupedBy =
+                schemas.stream().collect(Collectors.groupingBy(s -> s.getBasePackage()));
+
+        Map<String, Long> counts =
+                schemas.stream().collect(Collectors.toMap(s -> s.getClassName(), s -> repository.count(s)));
+
+        model.addAttribute("schemas", groupedBy);
+        model.addAttribute("query", query);
+        model.addAttribute("counts", counts);
+        model.addAttribute("activePage", "entities");
+        model.addAttribute("title", "Πίνακες | Index");
+
+        return "snapadmin/home";
+    }
 	
 	/**
 	 * Lists the items of a schema by applying a variety of filters:
@@ -163,6 +197,9 @@ public class SnapAdminController {
 			@RequestParam(required=false) String sortOrder, @RequestParam MultiValueMap<String, String> otherParams,
 			HttpServletRequest request,
 			HttpServletResponse response) {
+        if (!snapAdmin.isAuthenticated()) {
+            return "redirect:/" + properties.getBaseUrl() + "/unauthorized";
+        }
 		
 		if (page == null) page = 1;
 		if (pageSize == null) pageSize = 50;
@@ -248,7 +285,11 @@ public class SnapAdminController {
 	 */
 	@GetMapping("/model/{className}/schema")
 	public String schema(Model model, @PathVariable String className) {
-		DbObjectSchema schema = snapAdmin.findSchemaByClassName(className);
+        if (!snapAdmin.isAuthenticated()) {
+            return "redirect:/" + properties.getBaseUrl() + "/unauthorized";
+        }
+
+        DbObjectSchema schema = snapAdmin.findSchemaByClassName(className);
 		
 		model.addAttribute("activePage", "entities");
 		model.addAttribute("schema", schema);
@@ -265,6 +306,10 @@ public class SnapAdminController {
 	 */
 	@GetMapping("/model/{className}/show/{id}")
 	public String show(Model model, @PathVariable String className, @PathVariable String id) {
+        if (!snapAdmin.isAuthenticated()) {
+            return "redirect:/" + properties.getBaseUrl() + "/unauthorized";
+        }
+
 		DbObjectSchema schema = snapAdmin.findSchemaByClassName(className);
 		
 		Object pkValue = schema.getPrimaryKey().getType().parseValue(id);
@@ -286,6 +331,10 @@ public class SnapAdminController {
 	
 	@GetMapping("/model/{className}/create")
 	public String create(Model model, @PathVariable String className, RedirectAttributes attr) {
+        if (!snapAdmin.isAuthenticated()) {
+            return "redirect:/" + properties.getBaseUrl() + "/unauthorized";
+        }
+
 		DbObjectSchema schema = snapAdmin.findSchemaByClassName(className);
 		
 		if (!schema.isCreateEnabled()) {
@@ -305,6 +354,10 @@ public class SnapAdminController {
 	
 	@GetMapping("/model/{className}/edit/{id}")
 	public String edit(Model model, @PathVariable String className, @PathVariable String id, RedirectAttributes attr) {
+        if (!snapAdmin.isAuthenticated()) {
+            return "redirect:/" + properties.getBaseUrl() + "/unauthorized";
+        }
+
 		DbObjectSchema schema = snapAdmin.findSchemaByClassName(className);
 		
 		Object pkValue = schema.getPrimaryKey().getType().parseValue(id);
@@ -341,8 +394,13 @@ public class SnapAdminController {
 	 */
 	public String delete(@PathVariable String className, @PathVariable String id, RedirectAttributes attr,
 			Principal principal) {
+        if (!snapAdmin.isAuthenticated()) {
+            return "redirect:/" + properties.getBaseUrl() + "/unauthorized";
+        }
+
 		DbObjectSchema schema = snapAdmin.findSchemaByClassName(className);
-		String authUser = principal != null ? principal.getName() : null;
+		// String authUser = principal != null ? principal.getName() : null;
+        String authUser = snapAdmin.getUsername();
 		
 		if (!schema.isDeleteEnabled()) {
 			attr.addFlashAttribute("errorTitle", "Αδύνατο το DELETE γραμμής");
@@ -375,8 +433,13 @@ public class SnapAdminController {
 	 */
 	public String delete(@PathVariable String className, @RequestParam String[] ids, RedirectAttributes attr,
 			Principal principal) {
+        if (!snapAdmin.isAuthenticated()) {
+            return "redirect:/" + properties.getBaseUrl() + "/unauthorized";
+        }
+
 		DbObjectSchema schema = snapAdmin.findSchemaByClassName(className);
-		String authUser = principal != null ? principal.getName() : null;
+        // String authUser = principal != null ? principal.getName() : null;
+        String authUser = snapAdmin.getUsername();
 		
 		if (!schema.isDeleteEnabled()) {
 			attr.addFlashAttribute("errorTitle", "Αδύνατο το DELETE γραμμών");
@@ -410,7 +473,12 @@ public class SnapAdminController {
 			@RequestParam Map<String, MultipartFile> files,
 			RedirectAttributes attr,
 			Principal principal) {
-		String authUser = principal != null ? principal.getName() : null;
+        if (!snapAdmin.isAuthenticated()) {
+            return "redirect:/" + properties.getBaseUrl() + "/unauthorized";
+        }
+
+        // String authUser = principal != null ? principal.getName() : null;
+        String authUser = snapAdmin.getUsername();
 
 		// Extract all parameters that have exactly 1 value,
 		// as these will be the raw values for the object that is being
@@ -550,6 +618,10 @@ public class SnapAdminController {
 	
 	@GetMapping("/logs")
 	public String logs(Model model, LogsSearchRequest searchRequest) {
+        if (!snapAdmin.isAuthenticated()) {
+            return "redirect:/" + properties.getBaseUrl() + "/unauthorized";
+        }
+
 		if (searchRequest.getUsername() != null && searchRequest.getUsername().isEmpty()) {
 			searchRequest.setUsername(null);
 		}
@@ -567,22 +639,30 @@ public class SnapAdminController {
 	
 	@GetMapping("/settings")
 	public String settings(Model model) {
-		model.addAttribute("title", "Settings");
+        if (!snapAdmin.isAuthenticated()) {
+            return "redirect:/" + properties.getBaseUrl() + "/unauthorized";
+        }
+
+		model.addAttribute("title", "Ρυθμίσεις");
 		model.addAttribute("activePage", "settings");
 		return "snapadmin/settings/settings";
 	}
 	
 	@GetMapping("/help")
 	public String help(Model model) {
-		model.addAttribute("title", "Help");
+		model.addAttribute("title", "Βοήθεια");
 		model.addAttribute("activePage", "help");
 		return "snapadmin/help";
 	}
 	
 	@GetMapping("/console/new")
 	public String consoleNew(Model model) {
+        if (!snapAdmin.isAuthenticated()) {
+            return "redirect:/" + properties.getBaseUrl() + "/unauthorized";
+        }
+
 		if (!properties.isSqlConsoleEnabled()) {
-			throw new SnapAdminException("SQL console not enabled");
+			throw new SnapAdminException("Η κονσόλα SQL δεν είναι ενεργοποιημένη");
 		}
 		
 		ConsoleQuery q = new ConsoleQuery();
@@ -592,8 +672,12 @@ public class SnapAdminController {
 	
 	@GetMapping("/console")
 	public String console() {
+        if (!snapAdmin.isAuthenticated()) {
+            return "redirect:/" + properties.getBaseUrl() + "/unauthorized";
+        }
+
 		if (!properties.isSqlConsoleEnabled()) {
-			throw new SnapAdminException("SQL console not enabled");
+			throw new SnapAdminException("Η κονσόλα SQL δεν είναι ενεργοποιημένη");
 		}
 		
 		List<ConsoleQuery> tabs = consoleService.findAll();
@@ -619,8 +703,12 @@ public class SnapAdminController {
 	
 	@PostMapping("/console/delete/{queryId}")
 	public String consoleDelete(@PathVariable String queryId, Model model) {
+        if (!snapAdmin.isAuthenticated()) {
+            return "redirect:/" + properties.getBaseUrl() + "/unauthorized";
+        }
+
 		if (!properties.isSqlConsoleEnabled()) {
-			throw new SnapAdminException("SQL console not enabled");
+			throw new SnapAdminException("Η κονσόλα SQL δεν είναι ενεργοποιημένη");
 		}
 		consoleService.delete(queryId);
 		return "redirect:/" + properties.getBaseUrl() + "/console";
@@ -632,13 +720,17 @@ public class SnapAdminController {
 			@RequestParam(required = false) Integer page,
 			@RequestParam(required = false) Integer pageSize,
 			@PathVariable String queryId) {
+        if (!snapAdmin.isAuthenticated()) {
+            throw new SnapAdminException("Πρέπει να συνδεθείτε για να δείτε αυτή τη σελίδα.");
+        }
+
 		if (page == null || page <= 0) page = 1;
 		if (pageSize == null) pageSize = 50;
 		
 		long startTime = System.currentTimeMillis();
 		
 		if (!properties.isSqlConsoleEnabled()) {
-			throw new SnapAdminException("SQL console not enabled");
+			throw new SnapAdminException("Η κονσόλα SQL δεν είναι ενεργοποιημένη");
 		}
 		
 		ConsoleQuery activeQuery = consoleService.findById(queryId).orElseThrow(() -> {
@@ -688,20 +780,20 @@ public class SnapAdminController {
 	
 	@GetMapping("/settings/appearance")
 	public String settingsAppearance(Model model) {
+        if (!snapAdmin.isAuthenticated()) {
+            return "redirect:/" + properties.getBaseUrl() + "/unauthorized";
+        }
+
 		model.addAttribute("activePage", "settings");
 		return "snapadmin/settings/appearance";
 	}
-	
-	@GetMapping("/forbidden")
-	public String forbidden(Model model) {
-		model.addAttribute("error", "Forbidden");
-		model.addAttribute("status", "403");
-		model.addAttribute("message", "You don't have the privileges to perform this action");
-		return "snapadmin/other/error";
-	}
-	
+
 	@PostMapping("/settings")
 	public String settings(@RequestParam Map<String, String> params, Model model) {
+        if (!snapAdmin.isAuthenticated()) {
+            return "redirect:/" + properties.getBaseUrl() + "/unauthorized";
+        }
+
 		String next = params.getOrDefault("next", "snapadmin/settings/settings");
 		
 		for (String paramName : params.keySet()) {
@@ -712,8 +804,26 @@ public class SnapAdminController {
 		model.addAttribute("activePage", "settings");
 		return next;
 	}
-	
-	private UserAction saveAction(UserAction action) {
+
+	@GetMapping("/unauthorized")
+	public String unauthorized(Model model) {
+		model.addAttribute("title", "Anauthorized");
+		model.addAttribute("error", "Anauthorized");
+		model.addAttribute("status", "401");
+		model.addAttribute("message", "Πρέπει να συνδεθείτε για να δείτε αυτή τη σελίδα");
+		return "snapadmin/other/error";
+	}
+
+    @GetMapping("/forbidden")
+    public String forbidden(Model model) {
+	    model.addAttribute("title", "Forbidden");
+	    model.addAttribute("error", "Forbidden");
+        model.addAttribute("status", "403");
+        model.addAttribute("message", "Δεν έχετε τα δικαιώματα για να εκτελέσετε αυτήν την ενέργεια");
+        return "snapadmin/other/error";
+    }
+
+    private UserAction saveAction(UserAction action) {
 		return userActionService.save(action);
 	}
 }

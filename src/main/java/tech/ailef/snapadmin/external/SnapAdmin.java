@@ -32,6 +32,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,10 +85,10 @@ public class SnapAdmin {
 	private List<String> modelsPackage;
 	
 	private SnapAdminProperties properties;
-	
-	private boolean authenticated;
-	
-	private static final String VERSION = "0.2.3";
+
+    private HttpSession httpSession;
+
+    private static final String VERSION = "0.2.3";
     
     /**
 	 * Builds the SnapAdmin instance by scanning the `@Entity` beans and loading
@@ -95,10 +96,15 @@ public class SnapAdmin {
 	 * @param entityManager	the entity manager
 	 * @param properties	the configuration properties
 	 */
-	public SnapAdmin(@Autowired EntityManager entityManager, @Autowired SnapAdminProperties properties) {
+	public SnapAdmin(
+            @Autowired EntityManager entityManager,
+            @Autowired SnapAdminProperties properties,
+            @Autowired HttpSession httpSession
+    ) {
 		this.modelsPackage = Arrays.stream(properties.getModelsPackage().split(",")).map(String::trim).toList();
 		this.entityManager = entityManager;
 		this.properties = properties;
+		this.httpSession = httpSession;
 	}
 	
 	@PostConstruct
@@ -414,11 +420,23 @@ public class SnapAdmin {
 	}
 
 	public boolean isAuthenticated() {
-		return authenticated;
+        return httpSession.getAttribute("authenticated") != null && Boolean.parseBoolean(httpSession.getAttribute("authenticated").toString());
 	}
 	
 	public void setAuthenticated(boolean authenticated) {
-		this.authenticated = authenticated;
+        httpSession.setAttribute("authenticated", true);
 	}
+
+    public String getUsername() {
+        return httpSession.getAttribute("username") != null ? httpSession.getAttribute("username").toString() : null;
+    }
+
+    public void setUsername(String username) {
+		if (username == null) {
+			httpSession.removeAttribute("username");
+		} else {
+			httpSession.setAttribute("username", username);
+		}
+    }
 
 }

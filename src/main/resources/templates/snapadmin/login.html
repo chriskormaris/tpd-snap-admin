@@ -1,24 +1,33 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
-<head th:replace="~{snapadmin/fragments/resources::head}">
-</head>
-<body>
-    <div class="bg-light main-wrapper">
-        <div class="d-flex">
-            <div class="row mt-4">
-                <div class="col">
-                    <form method="POST" th:action="|/${snapadmin_baseUrl}/|" accept-charset="UTF-8">
-                        <label>Username:
-                            <input type="text" name="user" />
-                        </label>
-                        <label>Password:
-                            <input type="password" name="pass" />
-                        </label>
-                        <input type="submit" value="Login" />
-                    </form>
+    <head th:replace="~{snapadmin/fragments/resources::head}">
+    </head>
+    <body>
+        <div class="bg-light main-wrapper">
+            <nav th:replace="~{snapadmin/fragments/resources :: navbar}"></nav>
+            <div class="d-flex">
+                <div th:replace="~{snapadmin/fragments/resources :: sidebar('entities')}"></div>
+                <div class="main-content bg-lighter main-content-expanded">
+                    <div class="row mt-4">
+                        <div class="col">
+                            <div class="box">
+                                <th:block th:if="${!snapadmin_authenticated}">
+                                    <h3 class="fw-bold"><span class="align-middle">Σύνδεση</span></h3>
+                                    <form method="POST" th:action="|/${snapadmin_baseUrl}/login|" accept-charset="UTF-8">
+                                        <label>Username:
+                                            <input type="text" name="username" />
+                                        </label>
+                                        <label>Κωδικός:
+                                            <input type="password" name="password" />
+                                        </label>
+                                        <input type="submit" class="btn btn-primary" value="Σύνδεση" />
+                                    </form>
+                                </th:block>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</body>
+    </body>
 </html>

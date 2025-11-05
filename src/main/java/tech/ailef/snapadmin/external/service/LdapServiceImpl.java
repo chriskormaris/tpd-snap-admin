@@ -22,10 +22,10 @@ public class LdapServiceImpl implements LdapService {
     public final String SECURITY_PRINCIPAL_POSTFIX = "@tpd.local";
 
     @Override
-    public boolean isAuthenticUser(String user, String pass) {
+    public boolean isAuthenticUser(String username, String password) {
         boolean result = false;
 
-        if (user == null || pass == null || user.isEmpty() || pass.isEmpty()) {
+        if (username == null || password == null || username.isEmpty() || password.isEmpty()) {
             return result;
         }
 
@@ -35,8 +35,8 @@ public class LdapServiceImpl implements LdapService {
             env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
             env.put(Context.PROVIDER_URL, String.join(" ", ldapServerProperties.getUrls()));
             env.put(Context.SECURITY_AUTHENTICATION, SECURITY_AUTHENTICATION);
-            env.put(Context.SECURITY_PRINCIPAL, user + SECURITY_PRINCIPAL_POSTFIX);
-            env.put(Context.SECURITY_CREDENTIALS, pass);
+            env.put(Context.SECURITY_PRINCIPAL, username + SECURITY_PRINCIPAL_POSTFIX);
+            env.put(Context.SECURITY_CREDENTIALS, password);
 
             LdapContext ctxGC = new InitialLdapContext(env, null);
 
@@ -44,11 +44,11 @@ public class LdapServiceImpl implements LdapService {
 
             result = true;
 
-            log.info("LDAP authentication for " + user + " succeeded!");
+            log.info("LDAP authentication for " + username + " succeeded!");
         } catch (Exception ex) {
             // Not authenticated
-            log.error("LDAP authentication for " + user + " failed!", ex);
-            throw new SnapAdminException("LDAP authentication for " + user + " failed!", ex);
+            log.error("LDAP authentication for " + username + " failed!", ex);
+            throw new SnapAdminException("Σφάλμα πιστοποίησης για τον χρήστη " + username + "!", ex);
         }
 
         return result;

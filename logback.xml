@@ -9,7 +9,7 @@
         <file>logs/tpd-snap-admin.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <fileNamePattern>tpd-snap-admin.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>logs/tpd-snap-admin.%d{yyyy-MM-dd}.log</fileNamePattern>
 
             <!-- keep 30 days' worth of history -->
             <maxHistory>30</maxHistory>
