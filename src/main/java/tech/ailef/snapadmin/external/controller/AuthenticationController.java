@@ -11,6 +11,7 @@ import tech.ailef.snapadmin.external.SnapAdmin;
 import tech.ailef.snapadmin.external.dbmapping.DbObjectSchema;
 import tech.ailef.snapadmin.external.dbmapping.SnapAdminRepository;
 import tech.ailef.snapadmin.external.dto.Credentials;
+import tech.ailef.snapadmin.external.exceptions.SnapAdminException;
 import tech.ailef.snapadmin.external.service.LdapService;
 
 import java.util.List;
@@ -38,10 +39,14 @@ public class AuthenticationController {
     @PostMapping("/login")
     public String login(Model model, Credentials credentials) {
 	    String username = credentials.username().replace("@tpd.gr", "");
+
         boolean isAuthenticated = ldapService.isAuthenticUser(username, credentials.password());
+
         snapAdmin.setAuthenticated(isAuthenticated);
         if (isAuthenticated) {
             snapAdmin.setUsername(username);
+        } else {
+            throw new SnapAdminException("Σφάλμα πιστοποίησης για τον χρήστη " + username + "!");
         }
 
         addAttributes(model);

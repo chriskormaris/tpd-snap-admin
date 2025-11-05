@@ -424,7 +424,7 @@ public class SnapAdmin {
 	}
 	
 	public void setAuthenticated(boolean authenticated) {
-        httpSession.setAttribute("authenticated", true);
+        httpSession.setAttribute("authenticated", authenticated);
 	}
 
     public String getUsername() {

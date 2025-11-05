@@ -77,6 +77,25 @@ document.addEventListener("DOMContentLoaded", () => {
 		document.querySelectorAll("div.table-selectable select.page-size").forEach(e => {
             e.addEventListener('change', function(e) {
                 this.parentElement.querySelector("input[name=\"pageSize\"]").value = e.target.value;
+
+                const params = new URLSearchParams(window.location.search);
+
+                if (params.get('sortKey') != null) {
+                    var input = document.createElement('input');
+                    input.setAttribute('name', 'sortKey');
+                    input.setAttribute('value', params.get('sortKey'));
+                    input.setAttribute('type', 'hidden');
+                    this.parentElement.appendChild(input);
+                }
+
+                if (params.get('sortOrder') != null) {
+                    var input = document.createElement('input');
+                    input.setAttribute('name', 'sortOrder');
+                    input.setAttribute('value', params.get('sortOrder'));
+                    input.setAttribute('type', 'hidden');
+                    this.parentElement.appendChild(input);
+                }
+
                 this.parentElement.submit();
 		    });
         });

@@ -15,10 +15,10 @@
                                     <h3 class="fw-bold"><span class="align-middle">Σύνδεση</span></h3>
                                     <form method="POST" th:action="|/${snapadmin_baseUrl}/login|" accept-charset="UTF-8">
                                         <label>Username:
-                                            <input type="text" name="username" />
+                                            <input type="text" name="username" required />
                                         </label>
                                         <label>Κωδικός:
-                                            <input type="password" name="password" />
+                                            <input type="password" name="password" required />
                                         </label>
                                         <input type="submit" class="btn btn-primary" value="Σύνδεση" />
                                     </form>
