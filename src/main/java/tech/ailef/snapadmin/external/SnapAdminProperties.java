@@ -21,6 +21,9 @@ package tech.ailef.snapadmin.external;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * The 'snapadmin.*' properties that can be set in the properties file
  * to configure the behaviour of Spring Boot Admin Panel. 
@@ -51,6 +54,8 @@ public class SnapAdminProperties {
 	 * Whether the SQL console feature is enabled
 	 */
 	private boolean sqlConsoleEnabled = true;
+
+	private Set<String> whitelistedUsers = new HashSet<>();
 
 	/**
 	 * Whether SnapAdmin is enabled
@@ -104,6 +109,14 @@ public class SnapAdminProperties {
 		this.testMode = testMode;
 	}
 
+	public Set<String> getWhitelistedUsers() {
+		return whitelistedUsers;
+	}
+
+	public void setWhitelistedUsers(Set<String> whitelistedUsers) {
+		this.whitelistedUsers = whitelistedUsers;
+	}
+
 //	public Map<String, String> toMap() {
 //		Map<String, String> conf = new HashMap<>();
 //		conf.put("enabled", enabled + "");
@@ -111,8 +124,8 @@ public class SnapAdminProperties {
 //		conf.put("modelsPackage", modelsPackage);
 //		conf.put("testMode", testMode + "");
 //		conf.put("sqlConsoleEnabled", sqlConsoleEnabled + "");
+//		conf.put("whitelistedUsers", whitelistedUsers.toString());
 //		return conf;
 //	}
-	
 	
 }

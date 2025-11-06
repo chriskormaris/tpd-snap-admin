@@ -1,5 +1,6 @@
 package tech.ailef.snapadmin.external.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import tech.ailef.snapadmin.external.SnapAdmin;
+import tech.ailef.snapadmin.external.SnapAdminProperties;
 import tech.ailef.snapadmin.external.dbmapping.DbObjectSchema;
 import tech.ailef.snapadmin.external.dbmapping.SnapAdminRepository;
 import tech.ailef.snapadmin.external.dto.Credentials;
@@ -18,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Controller
 @RequestMapping(value= {"/${snapadmin.baseUrl}", "/${snapadmin.baseUrl}/"})
 public class AuthenticationController {
@@ -27,6 +30,9 @@ public class AuthenticationController {
 
     @Autowired
     private SnapAdmin snapAdmin;
+
+	@Autowired
+	private SnapAdminProperties snapAdminProperties;
 
     @Autowired
     private LdapService ldapService;
@@ -40,14 +46,17 @@ public class AuthenticationController {
     public String login(Model model, Credentials credentials) {
 	    String username = credentials.username().replace("@tpd.gr", "");
 
-        boolean isAuthenticated = ldapService.isAuthenticUser(username, credentials.password());
+		boolean isAuthenticated = ldapService.isAuthenticUser(username, credentials.password());
 
-        snapAdmin.setAuthenticated(isAuthenticated);
-        if (isAuthenticated) {
+	    if (isAuthenticated) {
+		    if (!snapAdminProperties.getWhitelistedUsers().contains(username)) {
+			    log.error("User " + username + " is not whitelisted!");
+			    throw new SnapAdminException("Ο χρήστης " + username + " δεν είναι στη λευκή λίστα!");
+		    }
+
+            snapAdmin.setAuthenticated(true);
             snapAdmin.setUsername(username);
-        } else {
-            throw new SnapAdminException("Σφάλμα πιστοποίησης για τον χρήστη " + username + "!");
-        }
+	    }
 
         addAttributes(model);
         model.addAttribute("activePage", "entities");

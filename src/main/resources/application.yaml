@@ -1,0 +1,11 @@
+ldap:
+  server:
+    urls:
+      - ldap://ldap.example.com
+      - ldap://backup-ldap.example.com
+
+snapadmin:
+  whitelistedUsers:
+    - alice
+    - bob
+    - charlie
