@@ -13,12 +13,13 @@
                             <div class="box">
                                 <th:block th:if="${!snapadmin_authenticated}">
                                     <h3 class="fw-bold"><span class="align-middle">Σύνδεση</span></h3>
-                                    <form method="POST" th:action="|/${snapadmin_baseUrl}/login|" accept-charset="UTF-8">
+                                    <p>Χρησιμοποιήστε τα διαπιστευτήρια του Active Directory.</p>
+                                    <form method="POST" th:action="|/${snapadmin_baseUrl}/login|" accept-charset="UTF-8" class="form-group">
                                         <label>Username:
-                                            <input type="text" name="username" required />
+                                            <input type="text" name="username" class="form-control" required />
                                         </label>
                                         <label>Κωδικός:
-                                            <input type="password" name="password" required />
+                                            <input type="password" name="password" class="form-control" required />
                                         </label>
                                         <input type="submit" class="btn btn-primary" value="Σύνδεση" />
                                     </form>
