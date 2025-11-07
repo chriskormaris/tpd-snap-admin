@@ -55,7 +55,9 @@ public class SnapAdminProperties {
 	 */
 	private boolean sqlConsoleEnabled = true;
 
-	private Set<String> whitelistedUsers = new HashSet<>();
+	private Set<String> whitelistUsers = new HashSet<>();
+
+	private Set<String> whitelistAdmins = new HashSet<>();
 
 	/**
 	 * Whether SnapAdmin is enabled
@@ -109,12 +111,20 @@ public class SnapAdminProperties {
 		this.testMode = testMode;
 	}
 
-	public Set<String> getWhitelistedUsers() {
-		return whitelistedUsers;
+	public Set<String> getWhitelistUsers() {
+		return whitelistUsers;
 	}
 
-	public void setWhitelistedUsers(Set<String> whitelistedUsers) {
-		this.whitelistedUsers = whitelistedUsers;
+	public void setWhitelistUsers(Set<String> whitelistUsers) {
+		this.whitelistUsers = whitelistUsers;
+	}
+
+	public Set<String> getWhitelistAdmins() {
+		return whitelistAdmins;
+	}
+
+	public void setWhitelistAdmins(Set<String> whitelistAdmins) {
+		this.whitelistAdmins = whitelistAdmins;
 	}
 
 //	public Map<String, String> toMap() {
@@ -124,7 +134,8 @@ public class SnapAdminProperties {
 //		conf.put("modelsPackage", modelsPackage);
 //		conf.put("testMode", testMode + "");
 //		conf.put("sqlConsoleEnabled", sqlConsoleEnabled + "");
-//		conf.put("whitelistedUsers", whitelistedUsers.toString());
+//		conf.put("whitelistUsers", whitelistUsers.toString());
+//		conf.put("whitelistAdmins", whitelistAdmins.toString());
 //		return conf;
 //	}
 	

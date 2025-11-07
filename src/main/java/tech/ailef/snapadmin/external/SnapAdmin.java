@@ -439,4 +439,8 @@ public class SnapAdmin {
 		}
     }
 
+	public boolean isAdmin() {
+		return properties.getWhitelistAdmins().contains(getUsername());
+	}
+
 }

@@ -11,9 +11,6 @@ import jakarta.validation.constraints.Size;
 import local.tpd.oracle.validation.AfmConstraint;
 import lombok.Data;
 import lombok.Getter;
-import tech.ailef.snapadmin.external.annotations.DisableCreate;
-import tech.ailef.snapadmin.external.annotations.DisableDelete;
-import tech.ailef.snapadmin.external.annotations.DisableEdit;
 import tech.ailef.snapadmin.external.annotations.DisplayName;
 import tech.ailef.snapadmin.external.annotations.Filterable;
 
@@ -26,9 +23,6 @@ import static local.tpd.oracle.validation.GreekValidationMessages.NINE_DIGITS_LE
 @Data
 @Entity
 @Getter
-@DisableEdit
-@DisableCreate
-@DisableDelete
 @Table(name = "PHYSIKA_PROSOPA", schema = "THYR")
 public class PhysikaProsopa {
 

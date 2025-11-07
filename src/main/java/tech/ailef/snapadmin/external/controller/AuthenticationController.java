@@ -49,7 +49,8 @@ public class AuthenticationController {
 		boolean isAuthenticated = ldapService.isAuthenticUser(username, credentials.password());
 
 	    if (isAuthenticated) {
-		    if (!snapAdminProperties.getWhitelistedUsers().contains(username)) {
+		    if (!snapAdminProperties.getWhitelistUsers().contains(username)
+				    && !snapAdminProperties.getWhitelistAdmins().contains(username)) {
 			    log.error("User " + username + " is not whitelisted!");
 			    throw new SnapAdminException("Ο χρήστης " + username + " δεν είναι στη λευκή λίστα!");
 		    }

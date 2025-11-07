@@ -7,9 +7,6 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.Getter;
-import tech.ailef.snapadmin.external.annotations.DisableCreate;
-import tech.ailef.snapadmin.external.annotations.DisableDelete;
-import tech.ailef.snapadmin.external.annotations.DisableEdit;
 import tech.ailef.snapadmin.external.annotations.DisplayName;
 import tech.ailef.snapadmin.external.annotations.Filterable;
 
@@ -20,9 +17,6 @@ import static local.tpd.oracle.validation.GreekValidationMessages.TEN_DIGITS_LEN
 @Data
 @Entity
 @Getter
-@DisableEdit
-@DisableCreate
-@DisableDelete
 @Table(name = "EMPLOYEE_INFO")
 public class EmployeeInfo {
 

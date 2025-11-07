@@ -334,6 +334,9 @@ public class SnapAdminController {
         if (!snapAdmin.isAuthenticated()) {
             return "redirect:/" + properties.getBaseUrl() + "/unauthorized";
         }
+		if (!snapAdmin.isAdmin()) {
+			return "redirect:/" + properties.getBaseUrl() + "/forbidden";
+		}
 
 		DbObjectSchema schema = snapAdmin.findSchemaByClassName(className);
 		
@@ -357,6 +360,9 @@ public class SnapAdminController {
         if (!snapAdmin.isAuthenticated()) {
             return "redirect:/" + properties.getBaseUrl() + "/unauthorized";
         }
+		if (!snapAdmin.isAdmin()) {
+			return "redirect:/" + properties.getBaseUrl() + "/forbidden";
+		}
 
 		DbObjectSchema schema = snapAdmin.findSchemaByClassName(className);
 		
@@ -397,6 +403,9 @@ public class SnapAdminController {
         if (!snapAdmin.isAuthenticated()) {
             return "redirect:/" + properties.getBaseUrl() + "/unauthorized";
         }
+		if (!snapAdmin.isAdmin()) {
+			return "redirect:/" + properties.getBaseUrl() + "/forbidden";
+		}
 
 		DbObjectSchema schema = snapAdmin.findSchemaByClassName(className);
 		// String authUser = principal != null ? principal.getName() : null;
@@ -436,6 +445,9 @@ public class SnapAdminController {
         if (!snapAdmin.isAuthenticated()) {
             return "redirect:/" + properties.getBaseUrl() + "/unauthorized";
         }
+		if (!snapAdmin.isAdmin()) {
+			return "redirect:/" + properties.getBaseUrl() + "/forbidden";
+		}
 
 		DbObjectSchema schema = snapAdmin.findSchemaByClassName(className);
         // String authUser = principal != null ? principal.getName() : null;
@@ -476,6 +488,9 @@ public class SnapAdminController {
         if (!snapAdmin.isAuthenticated()) {
             return "redirect:/" + properties.getBaseUrl() + "/unauthorized";
         }
+		if (!snapAdmin.isAdmin()) {
+			return "redirect:/" + properties.getBaseUrl() + "/forbidden";
+		}
 
         // String authUser = principal != null ? principal.getName() : null;
         String authUser = snapAdmin.getUsername();
