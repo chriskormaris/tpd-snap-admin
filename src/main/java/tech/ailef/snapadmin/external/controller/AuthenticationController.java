@@ -50,7 +50,7 @@ public class AuthenticationController {
 
 	    if (isAuthenticated) {
 		    if (!snapAdminProperties.getWhitelistUsers().contains(username)
-				    && !snapAdminProperties.getWhitelistAdmins().contains(username)) {
+				    && !snapAdminProperties.getAdmins().contains(username)) {
 			    log.error("User " + username + " is not whitelisted!");
 			    throw new SnapAdminException("Ο χρήστης " + username + " δεν είναι στη λευκή λίστα!");
 		    }

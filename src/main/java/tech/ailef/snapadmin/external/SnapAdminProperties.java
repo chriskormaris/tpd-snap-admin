@@ -21,7 +21,6 @@ package tech.ailef.snapadmin.external;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -55,9 +54,9 @@ public class SnapAdminProperties {
 	 */
 	private boolean sqlConsoleEnabled = true;
 
-	private Set<String> whitelistUsers = new HashSet<>();
+	private Set<String> whitelistUsers;
 
-	private Set<String> whitelistAdmins = new HashSet<>();
+	private Set<String> admins;
 
 	/**
 	 * Whether SnapAdmin is enabled
@@ -119,12 +118,12 @@ public class SnapAdminProperties {
 		this.whitelistUsers = whitelistUsers;
 	}
 
-	public Set<String> getWhitelistAdmins() {
-		return whitelistAdmins;
+	public Set<String> getAdmins() {
+		return admins;
 	}
 
-	public void setWhitelistAdmins(Set<String> whitelistAdmins) {
-		this.whitelistAdmins = whitelistAdmins;
+	public void setAdmins(Set<String> admins) {
+		this.admins = admins;
 	}
 
 //	public Map<String, String> toMap() {

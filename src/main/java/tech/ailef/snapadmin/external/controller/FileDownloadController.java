@@ -67,6 +67,9 @@ public class FileDownloadController {
 	@ResponseBody
 	public ResponseEntity<byte[]> serveImage(@PathVariable String className, 
 			@PathVariable String fieldName, @PathVariable String id) {
+		if (!snapAdmin.isAuthenticated()) {
+			throw new SnapAdminException("Σφάλμα πιστοποίησης για τον χρήστη " + snapAdmin.getUsername() + "!");
+		}
 
 		DbObjectSchema schema = snapAdmin.findSchemaByClassName(className);
 		
@@ -98,6 +101,9 @@ public class FileDownloadController {
 	@ResponseBody
 	public ResponseEntity<byte[]> serveFile(@PathVariable String className, 
 			@PathVariable String fieldName, @PathVariable String id) {
+		if (!snapAdmin.isAuthenticated()) {
+			throw new SnapAdminException("Σφάλμα πιστοποίησης για τον χρήστη " + snapAdmin.getUsername() + "!");
+		}
 
 		DbObjectSchema schema = snapAdmin.findSchemaByClassName(className);
 		

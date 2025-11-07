@@ -9,5 +9,5 @@ snapadmin:
     - alice
     - bob
     - charlie
-  whitelist-admins:
+  admins:
     - admin

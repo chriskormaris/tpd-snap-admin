@@ -90,6 +90,10 @@ public class DataExportController {
 	@GetMapping("/console/export/{queryId}")
 	public ResponseEntity<byte[]> export(@PathVariable String queryId, @RequestParam String format, 
 			@RequestParam MultiValueMap<String, String> otherParams) {
+		if (!snapAdmin.isAuthenticated()) {
+			throw new SnapAdminException("Σφάλμα πιστοποίησης για τον χρήστη " + snapAdmin.getUsername() + "!");
+		}
+
 		ConsoleQuery query = queryRepository.findById(queryId).orElseThrow(() -> new SnapAdminNotFoundException("Query not found: " + queryId));
 		
 		DataExportFormat exportFormat = null;
@@ -129,6 +133,10 @@ public class DataExportController {
 	public ResponseEntity<byte[]> export(@PathVariable String className, @RequestParam(required = false) String query,
 			@RequestParam String format, @RequestParam(required=false) Boolean raw, 
 			@RequestParam MultiValueMap<String, String> otherParams) {
+		if (!snapAdmin.isAuthenticated()) {
+			throw new SnapAdminException("Σφάλμα πιστοποίησης για τον χρήστη " + snapAdmin.getUsername() + "!");
+		}
+
 		if (raw == null) raw = false;
 		
 		DbObjectSchema schema = snapAdmin.findSchemaByClassName(className);

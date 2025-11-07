@@ -808,6 +808,9 @@ public class SnapAdminController {
         if (!snapAdmin.isAuthenticated()) {
             return "redirect:/" + properties.getBaseUrl() + "/unauthorized";
         }
+		if (!snapAdmin.isAdmin()) {
+			return "redirect:/" + properties.getBaseUrl() + "/forbidden";
+		}
 
 		String next = params.getOrDefault("next", "snapadmin/settings/settings");
 		
@@ -822,8 +825,8 @@ public class SnapAdminController {
 
 	@GetMapping("/unauthorized")
 	public String unauthorized(Model model) {
-		model.addAttribute("title", "Anauthorized");
-		model.addAttribute("error", "Anauthorized");
+		model.addAttribute("title", "Unauthorized");
+		model.addAttribute("error", "Unauthorized");
 		model.addAttribute("status", "401");
 		model.addAttribute("message", "Πρέπει να συνδεθείτε για να δείτε αυτή τη σελίδα");
 		return "snapadmin/other/error";
