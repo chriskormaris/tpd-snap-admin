@@ -13,6 +13,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.Getter;
+import tech.ailef.snapadmin.external.annotations.DisableCreate;
+import tech.ailef.snapadmin.external.annotations.DisableDelete;
+import tech.ailef.snapadmin.external.annotations.DisableEdit;
 import tech.ailef.snapadmin.external.annotations.Filterable;
 
 import java.time.LocalDate;
@@ -23,6 +26,9 @@ import static local.tpd.oracle.validation.GreekValidationMessages.NOT_NULL_MESSA
 @Data
 @Entity
 @Getter
+@DisableEdit
+@DisableCreate
+@DisableDelete
 @Table(name = "SYMBOLAIO", schema = "THYR")
 public class Symbolaio {
 
