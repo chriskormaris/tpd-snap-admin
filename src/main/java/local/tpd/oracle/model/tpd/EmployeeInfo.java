@@ -24,9 +24,6 @@ public class EmployeeInfo {
     @Column(name = "ID", nullable = false)
     private long ID;
 
-    @Column(name = "USERNAME", nullable = false)
-    private String username;
-
     @Filterable
     @Column(name = "ONOMA")
     @Size(max = 100, message = MAX_SIZE_MESSAGE)
@@ -37,8 +34,11 @@ public class EmployeeInfo {
     @Size(max = 100, message = MAX_SIZE_MESSAGE)
     private String eponymo;
 
+    @Column(name = "USERNAME", nullable = false, unique = true)
+    private String username;
+
     @Filterable
-    @Column(name = "EMAIL")
+    @Column(name = "EMAIL", nullable = false, unique = true)
     @Size(max = 100, message = MAX_SIZE_MESSAGE)
     private String email;
 
