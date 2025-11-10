@@ -5,9 +5,9 @@ ldap:
       - ldap://backup-ldap.example.com
 
 snapadmin:
+  admins:
+    - admin
   whitelist-users:
     - alice
     - bob
     - charlie
-  admins:
-    - admin

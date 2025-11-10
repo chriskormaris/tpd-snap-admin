@@ -34,7 +34,7 @@
 					<tr class="table-data-row">
 						<th class="table-checkbox"><input type="checkbox" class="form-check-input check-all"
 							th:classAppend="|${!schema.isDeleteEnabled() ? 'disable' : ''}|"></th>
-						<th></th>
+						<th style="min-width: 80px;"></th>
 						<th class="table-data-row" th:each="field : ${schema.getSortedFields()}">
 							<div class="m-0 p-0 d-flex justify-content-between">
 								<div class="column-title">
