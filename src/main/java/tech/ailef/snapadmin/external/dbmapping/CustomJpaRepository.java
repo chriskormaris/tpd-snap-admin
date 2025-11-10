@@ -172,7 +172,9 @@ public class CustomJpaRepository extends SimpleJpaRepository {
         if (q != null && !q.isBlank()) {
 	        for (DbField f : stringFields) {
 	        	Path path = root.get(f.getJavaName());
-	        	queryPredicates.add(cb.like(cb.lower(cb.toString(path)), "%" + q.toLowerCase() + "%"));
+                // We convert the last character to lower case separately to handle the Greek final sigma.
+                String lowerCaseQ = q.substring(0, q.length() - 1).toLowerCase() + q.substring(q.length() - 1).toLowerCase();
+	        	queryPredicates.add(cb.like(cb.lower(cb.toString(path)), "%" + lowerCaseQ + "%"));
 	        }
 	        
 	        Predicate queryPredicate = cb.or(queryPredicates.toArray(new Predicate[queryPredicates.size()]));

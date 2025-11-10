@@ -136,7 +136,7 @@ public class DbQueryOutputField {
 				DbFieldType type = DbFieldType.fromClass(result.get(this).getClass()).getConstructor().newInstance();
 				return type.toString();
 			} catch (UnsupportedFieldTypeException | InstantiationException | IllegalAccessException | 
-					IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+					IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | NullPointerException e) {
 				return "-";
 			}
 		}

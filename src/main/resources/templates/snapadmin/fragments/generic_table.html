@@ -6,7 +6,7 @@
 			<div th:if="${results == null || results.isEmpty()}">
 				<p class="alert alert-warning">No results.</p>
 			</div>
-			<div th:if="${results != null && results.size() > 0}">
+			<div th:if="${results != null && results.size() > 0}" class="overflow-auto">
 				<table class="table table-striped align-middle mt-3">
 					<tr class="table-data-row">
 						<th th:each="field : ${results.getSortedFields()}">
