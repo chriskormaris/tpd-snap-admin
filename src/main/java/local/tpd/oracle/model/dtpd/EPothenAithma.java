@@ -1,4 +1,4 @@
-package local.tpd.oracle.model.tpd;
+package local.tpd.oracle.model.dtpd;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,7 +17,7 @@ import static local.tpd.oracle.validation.GreekValidationMessages.NINE_DIGITS_LE
 @Data
 @Entity
 @Getter
-@Table(name = "E_POTHEN_AITHMA")
+@Table(name = "E_POTHEN_AITHMA", schema = "DTPD")
 public class EPothenAithma {
 
     @Id

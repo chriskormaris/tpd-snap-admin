@@ -23,13 +23,13 @@ import static local.tpd.oracle.validation.GreekValidationMessages.NINE_DIGITS_LE
 @Data
 @Entity
 @Getter
-@Table(name = "MHTRWO")
+@Table(name = "MHTRWO", schema = "DTPD")
 public class Mhtrwo {
 
     @Id
     @Column(name = "ID", nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mhtrwo_generator")
-    @SequenceGenerator(name = "mhtrwo_generator", sequenceName = "MHTRWO_SEQ", allocationSize = 1)
+    @SequenceGenerator(name = "mhtrwo_generator", sequenceName = "MHTRWO_SEQ", allocationSize = 1, schema = "DTPD")
     private long ID;
 
     @Filterable

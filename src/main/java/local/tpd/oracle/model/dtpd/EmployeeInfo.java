@@ -1,4 +1,4 @@
-package local.tpd.oracle.model.tpd;
+package local.tpd.oracle.model.dtpd;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,7 +17,7 @@ import static local.tpd.oracle.validation.GreekValidationMessages.TEN_DIGITS_LEN
 @Data
 @Entity
 @Getter
-@Table(name = "EMPLOYEE_INFO")
+@Table(name = "EMPLOYEE_INFO", schema = "DTPD")
 public class EmployeeInfo {
 
     @Id
