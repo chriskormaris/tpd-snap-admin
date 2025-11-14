@@ -219,6 +219,7 @@
 	                    </th:block>
 					  	<select class="form-select page-size">
 					  		<option disabled>Μέγεθος σελίδας</option>
+					  		<option th:selected="${page.getPagination().getPageSize() == 10}">10</option>
 					  		<option th:selected="${page.getPagination().getPageSize() == 20}">20</option>
 					  		<option th:selected="${page.getPagination().getPageSize() == 50}">50</option>
 					  		<option th:selected="${page.getPagination().getPageSize() == 100}">100</option>
@@ -243,6 +244,7 @@
 				  		<input type="hidden" name="pageSize">
 					  	<select class="form-select page-size">
 					  		<option disabled>Μέγεθος σελίδας</option>
+					  		<option th:selected="${page.getPagination().getPageSize() == 10}">10</option>
 					  		<option th:selected="${page.getPagination().getPageSize() == 20}">20</option>
 					  		<option th:selected="${page.getPagination().getPageSize() == 50}">50</option>
 					  		<option th:selected="${page.getPagination().getPageSize() == 100}">100</option>
