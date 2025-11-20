@@ -69,7 +69,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/logout")
-    public String logout(Model model, @RequestParam(required = false) String query) {
+    public String logout(Model model) {
         boolean isAuthenticated = false;
         snapAdmin.setAuthenticated(isAuthenticated);
         snapAdmin.setUsername(null);
