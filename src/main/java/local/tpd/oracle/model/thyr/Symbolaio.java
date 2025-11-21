@@ -41,7 +41,7 @@ public class Symbolaio {
     @Filterable
     @NotNull(message = NOT_NULL_MESSAGE)
     @JoinColumn(name = "THYRIDA_ID", referencedColumnName = "THYRIDA_ID", nullable = false)
-    private Thyrida thyridaId;
+    private Thyrida thyrida;
 
     @Filterable
     @Column(name = "SYMBOLAIO_STATUS")
@@ -62,7 +62,7 @@ public class Symbolaio {
     @ManyToOne
     @Filterable
     @JoinColumn(name = "KATHG_MIST_ID", referencedColumnName = "KATHG_MIST_ID")
-    private MisthwmaKathgoria kathgMistId;
+    private MisthwmaKathgoria misthwmaKathgoria;
 
     @Filterable
     @Column(name = "HMNIA_ANAN_MIST")
@@ -81,22 +81,22 @@ public class Symbolaio {
     @Filterable
     @NotNull(message = NOT_NULL_MESSAGE)
     @JoinColumn(name = "PHYSIKA_PROSOPA_ID", referencedColumnName = "PHYSIKA_PROSOPA_ID", nullable = false)
-    private PhysikaProsopa physikaProsopaId;
+    private PhysikaProsopa physikoProsopo;
 
     @ManyToOne
     @Filterable
     @JoinColumn(name = "PHYSIKA_PROSOPA_ID_A1", referencedColumnName = "PHYSIKA_PROSOPA_ID")
-    private PhysikaProsopa physikaProsopaIdA1;
+    private PhysikaProsopa physikoProsopo1;
 
     @ManyToOne
     @Filterable
     @JoinColumn(name = "PHYSIKA_PROSOPA_ID_A2", referencedColumnName = "PHYSIKA_PROSOPA_ID")
-    private PhysikaProsopa physikaProsopaIdA2;
+    private PhysikaProsopa physikoProsopo2;
 
     @ManyToOne
     @Filterable
     @JoinColumn(name = "PHYSIKA_PROSOPA_ID_A3", referencedColumnName = "PHYSIKA_PROSOPA_ID")
-    private PhysikaProsopa physikaProsopaIdA3;
+    private PhysikaProsopa physikoProsopo3;
 
     @Filterable
     @Column(name = "USER_COMMENT")

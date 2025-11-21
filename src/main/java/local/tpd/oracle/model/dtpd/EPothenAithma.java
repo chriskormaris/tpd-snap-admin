@@ -21,8 +21,11 @@ import static local.tpd.oracle.validation.GreekValidationMessages.NINE_DIGITS_LE
 public class EPothenAithma {
 
     @Id
+    @Column(name = "ID", nullable = false)
+    private String ID;
+
     @Column(name = "REQUEST_ID", nullable = false)
-    private String REQUEST_ID;
+    private String requestId;
 
     @Filterable
     @AfmConstraint
