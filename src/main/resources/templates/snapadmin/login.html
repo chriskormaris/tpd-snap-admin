@@ -11,22 +11,24 @@
                     <div class="row mt-4">
                         <div class="col">
                             <div class="box">
-                                <th:block th:if="${!snapadmin_authenticated}">
+                                <th:block th:if="${!snapadmin_loggedIn}">
                                     <h3 class="fw-bold"><span class="align-middle">Σύνδεση</span></h3>
                                     <p>Χρησιμοποιήστε τα διαπιστευτήρια του Active Directory.</p>
-                                    <form method="POST" th:action="|/${snapadmin_baseUrl}/login|" accept-charset="UTF-8" class="form-group">
-                                        <label>Username:
-                                            <input type="text" name="username" class="form-control" required />
-                                        </label>
-                                        <label>Κωδικός:
-                                            <input type="password" name="password" class="form-control" required />
-                                        </label>
-                                        <input type="submit" class="btn btn-primary" value="Σύνδεση" />
+                                    <form method="POST" th:action="|/${snapadmin_baseUrl}/auth/login|" class="form-group">
+                                        <div class="mb-3" style="width: 300px">
+                                            <label for="username" class="form-label">Username:</label>
+                                            <input type="text" id="username" name="username" class="form-control" placeholder="Εισάγετε το username σας" required />
+                                        </div>
+                                        <div class="mb-3" style="width: 300px">
+                                            <label for="password" class="form-label">Κωδικός:</label>
+                                            <input type="password" id="password" name="password" class="form-control" placeholder="Εισάγετε τον κωδικό σας" required />
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Σύνδεση</button>
                                     </form>
                                 </th:block>
-                                <th:block th:if="${snapadmin_authenticated}">
-                                    <form method="POST" th:action="|/${snapadmin_baseUrl}/logout|" accept-charset="UTF-8" class="form-group">
-                                        <input type="submit" class="btn btn-primary" value="Αποσύνδεση" />
+                                <th:block th:if="${snapadmin_loggedIn}">
+                                    <form method="POST" th:action="|/${snapadmin_baseUrl}/auth/logout|" class="form-group">
+                                        <button type="submit" class="btn btn-primary">Αποσύνδεση</button>
                                     </form>
                                 </th:block>
                             </div>

@@ -19,8 +19,6 @@
 
 package tech.ailef.snapadmin.external.controller;
 
-import java.util.Optional;
-
 import org.apache.tika.Tika;
 import org.apache.tika.mime.MimeTypeException;
 import org.apache.tika.mime.MimeTypes;
@@ -35,13 +33,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.server.ResponseStatusException;
-
 import tech.ailef.snapadmin.external.SnapAdmin;
 import tech.ailef.snapadmin.external.dbmapping.DbFieldValue;
 import tech.ailef.snapadmin.external.dbmapping.DbObject;
 import tech.ailef.snapadmin.external.dbmapping.DbObjectSchema;
 import tech.ailef.snapadmin.external.dbmapping.SnapAdminRepository;
 import tech.ailef.snapadmin.external.exceptions.SnapAdminException;
+
+import java.util.Optional;
 
 /**
  * Controller to serve file or images (`@DisplayImage`) 
@@ -67,10 +66,6 @@ public class FileDownloadController {
 	@ResponseBody
 	public ResponseEntity<byte[]> serveImage(@PathVariable String className, 
 			@PathVariable String fieldName, @PathVariable String id) {
-		if (!snapAdmin.isAuthenticated()) {
-			throw new SnapAdminException("Σφάλμα πιστοποίησης για τον χρήστη " + snapAdmin.getUsername() + "!");
-		}
-
 		DbObjectSchema schema = snapAdmin.findSchemaByClassName(className);
 		
 		Optional<DbObject> object = repository.findById(schema, id);
@@ -101,10 +96,6 @@ public class FileDownloadController {
 	@ResponseBody
 	public ResponseEntity<byte[]> serveFile(@PathVariable String className, 
 			@PathVariable String fieldName, @PathVariable String id) {
-		if (!snapAdmin.isAuthenticated()) {
-			throw new SnapAdminException("Σφάλμα πιστοποίησης για τον χρήστη " + snapAdmin.getUsername() + "!");
-		}
-
 		DbObjectSchema schema = snapAdmin.findSchemaByClassName(className);
 		
 		Optional<DbObject> object = repository.findById(schema, id);

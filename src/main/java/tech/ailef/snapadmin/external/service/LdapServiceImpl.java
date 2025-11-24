@@ -1,7 +1,10 @@
 package tech.ailef.snapadmin.external.service;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import jakarta.servlet.http.HttpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import tech.ailef.snapadmin.external.configuration.LdapServerProperties;
 import tech.ailef.snapadmin.external.exceptions.SnapAdminException;
@@ -11,22 +14,26 @@ import javax.naming.ldap.InitialLdapContext;
 import javax.naming.ldap.LdapContext;
 import java.util.Hashtable;
 
-@Slf4j
+import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
+
 @Service
-@RequiredArgsConstructor
 public class LdapServiceImpl implements LdapService {
 
-    private final LdapServerProperties ldapServerProperties;
+    private static final Logger logger = LoggerFactory.getLogger(LdapServiceImpl.class);
+
+    @Autowired
+    private LdapServerProperties ldapServerProperties;
+
+    @Autowired
+    private HttpSession httpSession;
 
     public final String SECURITY_AUTHENTICATION = "simple";
     public final String SECURITY_PRINCIPAL_POSTFIX = "@tpd.local";
 
     @Override
     public boolean isAuthenticUser(String username, String password) {
-        boolean result = false;
-
         if (username == null || password == null || username.isEmpty() || password.isEmpty()) {
-            return result;
+            return false;
         }
 
         try {
@@ -42,16 +49,16 @@ public class LdapServiceImpl implements LdapService {
 
             ctxGC.close();
 
-            result = true;
+            logger.info("LDAP authentication for " + username + " succeeded!");
 
-            log.info("LDAP authentication for " + username + " succeeded!");
+	        return true;
         } catch (Exception ex) {
             // Not authenticated
-            log.error("LDAP authentication for " + username + " failed!", ex);
+            logger.error("LDAP authentication for " + username + " failed!", ex);
+            SecurityContextHolder.clearContext();
+            httpSession.setAttribute(SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
             throw new SnapAdminException("Σφάλμα πιστοποίησης για τον χρήστη " + username + "!", ex);
         }
-
-        return result;
     }
 
 }

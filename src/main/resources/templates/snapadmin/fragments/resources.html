@@ -45,16 +45,16 @@
 	        	[[ ${snapadmin_userConf.get('brandName')} ]]
 	        </a>
 	        <div class="d-flex align-items-center p-2" id="current-user">
-                <th:block th:if="${snapadmin_authenticated == null || !snapadmin_authenticated}">
-                    <form method="GET" th:action="|/${snapadmin_baseUrl}/login|" accept-charset="UTF-8">
+                <th:block th:if="${snapadmin_loggedIn == null || !snapadmin_loggedIn}">
+                    <form method="GET" th:action="|/${snapadmin_baseUrl}/auth/login|" accept-charset="UTF-8">
                         <button class="btn btn-primary"/>
                             <i class="bi bi-person-circle me-2" style="color: white;"></i> Σύνδεση
                         </button>
                     </form>
                 </th:block>
-                <th:block th:if="${snapadmin_authenticated}">
+                <th:block th:if="${snapadmin_loggedIn}">
                     <span style="color: white;">[[ ${snapadmin_authenticatedUser} ]]&nbsp;</span>
-                    <form method="POST" th:action="|/${snapadmin_baseUrl}/logout|" accept-charset="UTF-8">
+                    <form method="POST" th:action="|/${snapadmin_baseUrl}/auth/logout|" accept-charset="UTF-8">
                         <button class="btn btn-primary"/>
                             <i class="bi bi-person-circle me-2" style="color: white;"></i> Αποσύνδεση
                         </button>
