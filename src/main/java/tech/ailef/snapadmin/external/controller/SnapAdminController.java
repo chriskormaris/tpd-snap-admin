@@ -86,9 +86,6 @@ import java.util.stream.Collectors;
 public class SnapAdminController {
 	private static final Logger logger = LoggerFactory.getLogger(SnapAdminController.class);
 
-	private static final String UNIQUE_CONSTRAINT_MESSAGE = "Το %s αυτό υπάρχει ήδη στον πίνακα. " +
-			"Εισάγετε ένα διαφορετικό.";
-
 	@Autowired
 	private SnapAdminProperties properties;
 
@@ -526,13 +523,7 @@ public class SnapAdminController {
 			}
 		} catch (DataIntegrityViolationException e) {
 			attr.addFlashAttribute("errorTitle", "Σφάλμα βάσης");
-			if (e.getMessage().contains("ORA-00001: unique constraint (DTPD.MHTRWO_AFM_UNIQUE) violated")) {
-				attr.addFlashAttribute("error", UNIQUE_CONSTRAINT_MESSAGE.formatted("ΑΦΜ"));
-			} else if (e.getMessage().contains("ORA-00001: unique constraint (DTPD.MHTRWO_ACCOUNT_IBAN_UNIQUE) violated")) {
-				attr.addFlashAttribute("error", UNIQUE_CONSTRAINT_MESSAGE.formatted("ΙΒΑΝ"));
-			} else {
-				attr.addFlashAttribute("error", e.getMessage());
-			}
+            attr.addFlashAttribute("error", e.getMessage());
 			attr.addFlashAttribute("params", params);
 		} catch (UncategorizedSQLException | IdentifierGenerationException e) {
 			attr.addFlashAttribute("errorTitle", "Σφάλμα βάσης");
@@ -635,7 +626,7 @@ public class SnapAdminController {
 			q.setSql(
 				"-- Σας προτείνουμε να συμπεριλάβετε την έκφραση ROWNUM στο ερώτημά σας\n"
 				+ "-- Παρόλο που η Κονσόλα SQL υποστηρίζει σελιδοποίηση, επιστρέφει όλα τα αποτελέσματα\n\n"
-				+ "SELECT * FROM DTPD.MHTRWO WHERE ROWNUM <= 1000"
+				+ "SELECT * FROM DTPD.EMPLOYEE_INFO WHERE ROWNUM <= 1000"
 			);
 
 			consoleService.save(q);

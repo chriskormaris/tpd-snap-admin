@@ -16,8 +16,10 @@ import tech.ailef.snapadmin.external.annotations.Filterable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import static local.tpd.oracle.validation.GreekValidationMessages.ELEVEN_DIGITS_LENGTH_MESSAGE;
 import static local.tpd.oracle.validation.GreekValidationMessages.FIVE_DIGITS_LENGTH_MESSAGE;
 import static local.tpd.oracle.validation.GreekValidationMessages.MAX_SIZE_MESSAGE;
+import static local.tpd.oracle.validation.GreekValidationMessages.NINE_DIGITS_LENGTH_MESSAGE;
 import static local.tpd.oracle.validation.GreekValidationMessages.TEN_DIGITS_LENGTH_MESSAGE;
 
 @Data
@@ -76,27 +78,27 @@ public class EmployeeInfo {
     @Filterable
     @Column(name = "POSTAL_CODE")
     @Size(min = 9, max = 9, message = FIVE_DIGITS_LENGTH_MESSAGE)
-    private Integer postalCode;
+    private String postalCode;
 
     @Filterable
     @Column(name = "HOME_PHONE")
     @Size(min = 10, max = 10, message = TEN_DIGITS_LENGTH_MESSAGE)
-    private Long homePhone;
+    private String homePhone;
 
     @Filterable
     @Column(name = "MOBILE_PHONE")
     @Size(min = 10, max = 10, message = TEN_DIGITS_LENGTH_MESSAGE)
-    private Long mobilePhone;
+    private String mobilePhone;
 
     @Filterable
-    @Size(min = 9, max = 9)
+    @Size(min = 9, max = 9, message = NINE_DIGITS_LENGTH_MESSAGE)
     @Column(name = "AFM")
-    private Long afm;
+    private String afm;
 
     @Filterable
-    @Size(min = 11, max = 11)
+    @Size(min = 11, max = 11, message = ELEVEN_DIGITS_LENGTH_MESSAGE)
     @Column(name = "AMKA")
-    private Long amka;
+    private String amka;
 
     @Filterable
     @Size(max = 100)

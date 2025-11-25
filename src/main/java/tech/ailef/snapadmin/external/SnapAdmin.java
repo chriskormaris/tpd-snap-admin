@@ -39,6 +39,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import tech.ailef.snapadmin.external.annotations.Disable;
 import tech.ailef.snapadmin.external.annotations.DisplayFormat;
@@ -164,7 +165,7 @@ public class SnapAdmin {
 	 */
 	public DbObjectSchema findSchemaByClassName(String className) {
 		return schemas.stream().filter(s -> s.getClassName().equals(className)).findFirst().orElseThrow(() -> {
-			return new SnapAdminNotFoundException("Schema " + className + " not found.");
+			return new SnapAdminNotFoundException("Το σχήμα " + className + " δεν βρέθηκε.");
 		});
 	}
 	
@@ -176,7 +177,7 @@ public class SnapAdmin {
 	 */
 	public DbObjectSchema findSchemaByTableName(String tableName) {
 		return schemas.stream().filter(s -> s.getTableName().equals(tableName)).findFirst().orElseThrow(() -> {
-			return new SnapAdminException("Schema " + tableName + " not found.");
+			return new SnapAdminException("Το σχήμα " + tableName + " δεν βρέθηκε.");
 		});
 	}
 	
@@ -428,8 +429,10 @@ public class SnapAdmin {
     public void setAuthenticated(boolean authenticated) {
         this.authenticated = authenticated;
     }
+
     public boolean isLoggedIn() {
-        return httpSession.getAttribute("logged_in") != null && Boolean.parseBoolean(httpSession.getAttribute("logged_in").toString());
+        return httpSession.getAttribute("logged_in") != null && Boolean.parseBoolean(httpSession.getAttribute("logged_in").toString())
+                && SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
     }
 
     public void setLoggedIn(boolean loggedIn) {
