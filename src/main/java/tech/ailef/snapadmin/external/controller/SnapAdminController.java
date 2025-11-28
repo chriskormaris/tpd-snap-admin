@@ -671,6 +671,22 @@ public class SnapAdminController {
 			activeQuery.setTitle(queryTitle);
 		}
 
+        if (activeQuery.getSql() != null) {
+            if (activeQuery.getSql().toUpperCase().contains("INSERT")) {
+                throw new SnapAdminException("Η εκτέλεση εντολών που περιέχουν τη λέξη INSERT δεν επιτρέπεται στην Κονσόλα SQL.");
+            } else if (activeQuery.getSql().toUpperCase().contains("UPDATE")) {
+                throw new SnapAdminException("Η εκτέλεση εντολών που περιέχουν τη λέξη UPDATE δεν επιτρέπεται στην Κονσόλα SQL.");
+            } else if (activeQuery.getSql().toUpperCase().contains("DELETE")) {
+                throw new SnapAdminException("Η εκτέλεση εντολών που περιέχουν τη λέξη DELETE δεν επιτρέπεται στην Κονσόλα SQL.");
+            } else if (activeQuery.getSql().toUpperCase().contains("ALTER")) {
+                throw new SnapAdminException("Η εκτέλεση εντολών που περιέχουν τη λέξη ALTER δεν επιτρέπεται στην Κονσόλα SQL.");
+            } else if (activeQuery.getSql().toUpperCase().contains("DROP")) {
+                throw new SnapAdminException("Η εκτέλεση εντολών που περιέχουν τη λέξη DROP δεν επιτρέπεται στην Κονσόλα SQL.");
+            } else if (activeQuery.getSql().toUpperCase().contains("TRUNCATE")) {
+                throw new SnapAdminException("Η εκτέλεση εντολών που περιέχουν τη λέξη TRUNCATE δεν επιτρέπεται στην Κονσόλα SQL.");
+            }
+        }
+
 		activeQuery.setUpdatedAt(LocalDateTime.now());
 		consoleService.save(activeQuery);
 
