@@ -18,6 +18,7 @@ import tech.ailef.snapadmin.external.SnapAdminProperties;
 import tech.ailef.snapadmin.external.dbmapping.SnapAdminRepository;
 import tech.ailef.snapadmin.external.dto.Credentials;
 import tech.ailef.snapadmin.external.exceptions.SnapAdminException;
+import tech.ailef.snapadmin.external.service.AuthResponse;
 import tech.ailef.snapadmin.external.service.LdapService;
 
 import java.util.Collections;
@@ -55,7 +56,7 @@ public class AuthenticationController {
     public String login(Credentials credentials) {
         String username = credentials.username().replace("@tpd.gr", "");
 
-        ldapService.isAuthenticUser(username, credentials.password());
+        AuthResponse authResponse = ldapService.isAuthenticUser(username, credentials.password());
 
         if (!properties.getWhitelistUsers().contains(username)
                 && !properties.getAdmins().contains(username)) {
@@ -84,6 +85,7 @@ public class AuthenticationController {
         httpSession.setAttribute(SPRING_SECURITY_CONTEXT_KEY, context);
 
         snapAdmin.setLoggedIn(true);
+        snapAdmin.setFullName(authResponse.firstName() + " " + authResponse.lastName());
 
 	    return "redirect:/" + properties.getBaseUrl();
     }
@@ -91,6 +93,7 @@ public class AuthenticationController {
     @PostMapping("/logout")
     public String logout() {
         snapAdmin.setLoggedIn(false);
+        snapAdmin.setFullName("");
 
         SecurityContextHolder.clearContext();
         httpSession.setAttribute(SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());

@@ -40,23 +40,22 @@
 	    <div class="container-fluid">
 	        <a class=" fw-bold navbar-brand" th:href="|/${snapadmin_baseUrl}|">
 				<img th:src="|/${snapadmin_baseUrl}/snapadmin/logo/logo.png|" alt="tpd" height="35">
-<!--				<i class="bi bi-hexagon-fill"></i>-->
-				&nbsp;
+                <!--<i class="bi bi-hexagon-fill"></i>-->
 	        	[[ ${snapadmin_userConf.get('brandName')} ]]
 	        </a>
 	        <div class="d-flex align-items-center p-2" id="current-user">
                 <th:block th:if="${snapadmin_loggedIn == null || !snapadmin_loggedIn}">
                     <form method="GET" th:action="|/${snapadmin_baseUrl}/auth/login|" accept-charset="UTF-8">
-                        <button class="btn btn-primary"/>
+                        <button class="btn btn-primary">
                             <i class="bi bi-person-circle me-2" style="color: white;"></i> Σύνδεση
                         </button>
                     </form>
                 </th:block>
                 <th:block th:if="${snapadmin_loggedIn}">
-                    <span style="color: white;">[[ ${snapadmin_authenticatedUser} ]]&nbsp;</span>
+                    <span>Συνδεμένος Χρήστης: <strong>[[ ${snapadmin_fullName} ]]</strong> - [[ ${snapadmin_authenticatedUser} ]]&nbsp;</span>
                     <form method="POST" th:action="|/${snapadmin_baseUrl}/auth/logout|" accept-charset="UTF-8">
-                        <button class="btn btn-primary"/>
-                            <i class="bi bi-person-circle me-2" style="color: white;"></i> Αποσύνδεση
+                        <button class="btn btn-primary">
+                            <i class="bi bi-person-circle me-2 color-white"></i> Αποσύνδεση
                         </button>
                     </form>
                 </th:block>

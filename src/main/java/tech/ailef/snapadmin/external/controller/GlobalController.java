@@ -142,4 +142,9 @@ public class GlobalController {
         return snapAdmin.isLoggedIn();
     }
 
+    @ModelAttribute("snapadmin_fullName")
+    public String getFullName() {
+        return snapAdmin.getFullName();
+    }
+
 }
