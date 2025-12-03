@@ -86,23 +86,23 @@ public class EmployeeInfo {
     private String homePhone;
 
     @Filterable
-    @Column(name = "MOBILE_PHONE")
+    @Column(name = "MOBILE_PHONE", unique = true)
     @Size(min = 10, max = 10, message = TEN_DIGITS_LENGTH_MESSAGE)
     private String mobilePhone;
 
     @Filterable
     @Size(min = 9, max = 9, message = NINE_DIGITS_LENGTH_MESSAGE)
-    @Column(name = "AFM")
+    @Column(name = "AFM", unique = true)
     private String afm;
 
     @Filterable
     @Size(min = 11, max = 11, message = ELEVEN_DIGITS_LENGTH_MESSAGE)
-    @Column(name = "AMKA")
+    @Column(name = "AMKA", unique = true)
     private String amka;
 
     @Filterable
     @Size(max = 100)
-    @Column(name = "PERSONAL_EMAIL")
+    @Column(name = "PERSONAL_EMAIL", unique = true)
     private String personalEmail;
 
     @Filterable
