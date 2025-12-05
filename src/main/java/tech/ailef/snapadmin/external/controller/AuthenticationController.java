@@ -58,7 +58,7 @@ public class AuthenticationController {
 
         AuthResponse authResponse = ldapService.isAuthenticUser(username, credentials.password());
 
-        if (!properties.getWhitelistUsers().contains(username)
+        if (!properties.getWhitelistedUsers().contains(username)
                 && !properties.getAdmins().contains(username)) {
             logger.error("User " + username + " is not whitelisted!");
             SecurityContextHolder.clearContext();

@@ -7,7 +7,7 @@ ldap:
 snapadmin:
   admins:
     - admin
-  whitelist-users:
+  whitelisted-users:
     - alice
     - bob
     - charlie

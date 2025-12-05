@@ -54,7 +54,7 @@ public class SnapAdminProperties {
 	 */
 	private boolean sqlConsoleEnabled = true;
 
-	private Set<String> whitelistUsers;
+	private Set<String> whitelistedUsers;
 
 	private Set<String> admins;
 
@@ -110,12 +110,12 @@ public class SnapAdminProperties {
 		this.testMode = testMode;
 	}
 
-	public Set<String> getWhitelistUsers() {
-		return whitelistUsers;
+	public Set<String> getWhitelistedUsers() {
+		return whitelistedUsers;
 	}
 
-	public void setWhitelistUsers(Set<String> whitelistUsers) {
-		this.whitelistUsers = whitelistUsers;
+	public void setWhitelistedUsers(Set<String> whitelistedUsers) {
+		this.whitelistedUsers = whitelistedUsers;
 	}
 
 	public Set<String> getAdmins() {
@@ -133,8 +133,8 @@ public class SnapAdminProperties {
 //		conf.put("modelsPackage", modelsPackage);
 //		conf.put("testMode", testMode + "");
 //		conf.put("sqlConsoleEnabled", sqlConsoleEnabled + "");
-//		conf.put("whitelistUsers", whitelistUsers.toString());
-//		conf.put("whitelistAdmins", whitelistAdmins.toString());
+//		conf.put("whitelistedUsers", whitelistedUsers.toString());
+//		conf.put("admins", admins.toString());
 //		return conf;
 //	}
 	
