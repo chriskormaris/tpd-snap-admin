@@ -60,7 +60,7 @@ public class AuthenticationController {
 
         if (!properties.getWhitelistedUsers().contains(username)
                 && !properties.getAdmins().contains(username)) {
-            logger.error("User " + username + " is not whitelisted!");
+            logger.error("User {} is not whitelisted!", username);
             SecurityContextHolder.clearContext();
             httpSession.setAttribute(SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
             throw new SnapAdminException("Ο χρήστης " + username + " δεν είναι στη λευκή λίστα!");

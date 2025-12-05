@@ -521,13 +521,9 @@ public class SnapAdminController {
 					saveAction(new UserAction(schema.getTableName(), pkValue, "CREATE", schema.getClassName(), authUser));
 				}
 			}
-		} catch (DataIntegrityViolationException e) {
+		} catch (DataIntegrityViolationException | UncategorizedSQLException | IdentifierGenerationException e) {
 			attr.addFlashAttribute("errorTitle", "Σφάλμα βάσης");
             attr.addFlashAttribute("error", e.getMessage());
-			attr.addFlashAttribute("params", params);
-		} catch (UncategorizedSQLException | IdentifierGenerationException e) {
-			attr.addFlashAttribute("errorTitle", "Σφάλμα βάσης");
-			attr.addFlashAttribute("error", e.getMessage());
 			attr.addFlashAttribute("params", params);
 		} catch (ConstraintViolationException e) {
 			attr.addFlashAttribute("errorTitle", "Σφάλμα επαλήθευσης");
