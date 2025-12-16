@@ -35,12 +35,12 @@ public class EmployeeInfo {
     private long ID;
 
     @Filterable
-    @Column(name = "ONOMA", nullable = false)
+    @Column(name = "ONOMA")
     @Size(max = 100, message = MAX_SIZE_MESSAGE)
     private String onoma;
 
     @Filterable
-    @Column(name = "EPONYMO", nullable = false)
+    @Column(name = "EPONYMO")
     @Size(max = 100, message = MAX_SIZE_MESSAGE)
     private String eponymo;
 
