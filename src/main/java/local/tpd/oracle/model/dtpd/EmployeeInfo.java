@@ -54,8 +54,37 @@ public class EmployeeInfo {
     private String email;
 
     @Filterable
+    @Size(max = 100)
+    @Column(name = "ONOMA_PATERA")
+    private String onomaPatera;
+
+    @Filterable
+    @Size(max = 100)
+    @Column(name = "EPONYMO_PATERA")
+    private String eponymoPatera;
+
+    @Filterable
+    @Size(max = 100)
+    @Column(name = "ONOMA_MHTERAS")
+    private String onomaMhteras;
+
+    @Filterable
+    @Size(max = 100)
+    @Column(name = "EPONYMO_MHTERAS")
+    private String eponymoMhteras;
+
+    @Filterable
     @Column(name = "HMNIA_GENHSHS")
     private LocalDate hmniaGenhshs;
+
+    @Filterable
+    @Size(min = 9, max = 9, message = NINE_DIGITS_LENGTH_MESSAGE)
+    @Column(name = "AFM", unique = true)
+    private String afm;
+
+    @Filterable
+    @Column(name = "DOY")
+    private String doy;
 
     @Filterable
     @Column(name = "ADT", unique = true)
@@ -64,6 +93,11 @@ public class EmployeeInfo {
     @Filterable
     @Column(name = "HMNIA_EKDOSHS")
     private LocalDate hmniaEkdoshs;
+
+    @Filterable
+    @Size(min = 11, max = 11, message = ELEVEN_DIGITS_LENGTH_MESSAGE)
+    @Column(name = "AMKA", unique = true)
+    private String amka;
 
     @Filterable
     @Column(name = "ADDRESS")
@@ -91,39 +125,9 @@ public class EmployeeInfo {
     private String mobilePhone;
 
     @Filterable
-    @Size(min = 9, max = 9, message = NINE_DIGITS_LENGTH_MESSAGE)
-    @Column(name = "AFM", unique = true)
-    private String afm;
-
-    @Filterable
-    @Size(min = 11, max = 11, message = ELEVEN_DIGITS_LENGTH_MESSAGE)
-    @Column(name = "AMKA", unique = true)
-    private String amka;
-
-    @Filterable
     @Size(max = 100)
     @Column(name = "PERSONAL_EMAIL", unique = true)
     private String personalEmail;
-
-    @Filterable
-    @Size(max = 100)
-    @Column(name = "ONOMA_PATERA")
-    private String onomaPatera;
-
-    @Filterable
-    @Size(max = 100)
-    @Column(name = "EPONYMO_PATERA")
-    private String eponymoPatera;
-
-    @Filterable
-    @Size(max = 100)
-    @Column(name = "ONOMA_MHTERAS")
-    private String onomaMhteras;
-
-    @Filterable
-    @Size(max = 100)
-    @Column(name = "EPONYMO_MHTERAS")
-    private String eponymoMhteras;
 
     @Filterable
     @Column(name = "INSERT_TIMESTAMP")
@@ -132,6 +136,10 @@ public class EmployeeInfo {
     @Filterable
     @Column(name = "UPDATE_TIMESTAMP")
     private LocalDateTime updateTimestamp;
+
+    @Filterable
+    @Column(name = "TEMPORARY_FLAG")
+    private Integer temporaryFlag;
 
     @DisplayName
     public String getDisplayName() {

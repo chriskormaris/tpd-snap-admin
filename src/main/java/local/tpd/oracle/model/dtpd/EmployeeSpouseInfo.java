@@ -35,6 +35,11 @@ public class EmployeeSpouseInfo {
 	private EmployeeInfo employeeInfoEntity;
 
     @Filterable
+    @Size(max = 10)
+    @Column(name = "FAMILY_STATUS")
+    private String familyStatus;
+
+    @Filterable
     @Size(max = 100)
     @Column(name = "ONOMA")
     private String onoma;

@@ -75,6 +75,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -616,13 +617,13 @@ public class SnapAdminController {
 		if (tabs.isEmpty()) {
 			ConsoleQuery q = new ConsoleQuery();
 
-			// int randomIndex = new Random().nextInt(0, snapAdmin.getSchemas().size());
-			// String randomTable = snapAdmin.getSchemas().get(randomIndex).getTableName();
+			int randomIndex = new Random().nextInt(0, snapAdmin.getSchemas().size());
+			String randomTable = snapAdmin.getSchemas().get(randomIndex).getTableName();
 
 			q.setSql(
 				"-- Σας προτείνουμε να συμπεριλάβετε την έκφραση ROWNUM στο ερώτημά σας\n"
 				+ "-- Παρόλο που η Κονσόλα SQL υποστηρίζει σελιδοποίηση, επιστρέφει όλα τα αποτελέσματα\n\n"
-				+ "SELECT * FROM DTPD.EMPLOYEE_INFO WHERE ROWNUM <= 1000"
+				+ "SELECT * FROM " + randomTable + " WHERE ROWNUM <= 1000"
 			);
 
 			consoleService.save(q);
