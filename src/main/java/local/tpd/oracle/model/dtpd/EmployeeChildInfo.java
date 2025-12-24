@@ -11,10 +11,8 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 import tech.ailef.snapadmin.external.annotations.DisplayName;
 import tech.ailef.snapadmin.external.annotations.Filterable;
 
@@ -24,9 +22,7 @@ import static local.tpd.oracle.validation.GreekValidationMessages.NOT_NULL_MESSA
 
 @Data
 @Entity
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
 @Table(name = "EMPLOYEE_CHILD_INFO", schema = "DTPD")
 public class EmployeeChildInfo {
 
