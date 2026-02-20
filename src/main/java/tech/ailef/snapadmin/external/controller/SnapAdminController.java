@@ -125,12 +125,12 @@ public class SnapAdminController {
             Map<String, List<DbObjectSchema>> groupedBy =
                     schemas.stream().collect(Collectors.groupingBy(s -> s.getBasePackage()));
 
-            Map<String, Long> counts =
-                    schemas.stream().collect(Collectors.toMap(s -> s.getClassName(), s -> repository.count(s)));
+            // Map<String, Long> counts =
+			// 		schemas.stream().collect(Collectors.toMap(s -> s.getClassName(), s -> repository.count(s)));
 
             model.addAttribute("schemas", groupedBy);
             model.addAttribute("query", query);
-            model.addAttribute("counts", counts);
+            // model.addAttribute("counts", counts);
             model.addAttribute("activePage", "entities");
             model.addAttribute("title", "Πίνακες | Index");
 
@@ -153,12 +153,12 @@ public class SnapAdminController {
         Map<String, List<DbObjectSchema>> groupedBy =
                 schemas.stream().collect(Collectors.groupingBy(s -> s.getBasePackage()));
 
-        Map<String, Long> counts =
-                schemas.stream().collect(Collectors.toMap(s -> s.getClassName(), s -> repository.count(s)));
+		// Map<String, Long> counts =
+		// 		schemas.stream().collect(Collectors.toMap(s -> s.getClassName(), s -> repository.count(s)));
 
         model.addAttribute("schemas", groupedBy);
         model.addAttribute("query", query);
-        model.addAttribute("counts", counts);
+        // model.addAttribute("counts", counts);
         model.addAttribute("activePage", "entities");
         model.addAttribute("title", "Πίνακες | Index");
 

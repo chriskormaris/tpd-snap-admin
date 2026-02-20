@@ -39,7 +39,7 @@
 			        					<tr>
 			        						<th></th>
 			        						<th>Πίνακας</th>
-			        						<th>Γραμμές</th>
+<!--			        						<th>Γραμμές</th>-->
 			        						<th>Java κλάση</th>
 			        						<th></th>
 			        					</tr>
@@ -54,9 +54,9 @@
 												<a th:text="${schema.getTableName()}"
 												th:href="|/${snapadmin_baseUrl}/model/${schema.getClassName()}|"></a>
 											</td>
-											<td>
-												<span th:text="${counts.get(schema.getClassName())}"></span>
-											</td>
+<!--											<td>-->
+<!--												<span th:text="${counts.get(schema.getClassName())}"></span>-->
+<!--											</td>-->
 											<td>
 												<span th:text="${schema.getClassName()}"></span>
 											</td>
