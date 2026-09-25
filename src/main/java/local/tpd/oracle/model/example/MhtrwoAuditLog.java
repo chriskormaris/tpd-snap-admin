@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @DisableEdit
 @DisableCreate
 @DisableDelete
-@Table(name = "MHTRWO_AUDIT_LOG")
+@Table(name = "MHTRWO_AUDIT_LOG", schema = "DTPD")
 public class MhtrwoAuditLog {
 
     @Id

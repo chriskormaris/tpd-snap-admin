@@ -56,7 +56,9 @@ public class ExternalSnapAdminConfiguration {
         factoryBean.setPackagesToScan(snapAdminProperties.getModelsPackage().split(","));
         factoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
         Properties properties = new Properties();
-        properties.setProperty("hibernate.dialect", jpaProperties.getDatabasePlatform());
+        if (jpaProperties.getDatabasePlatform() != null) {
+            properties.setProperty("hibernate.dialect", jpaProperties.getDatabasePlatform());
+        }
         factoryBean.setJpaProperties(properties);
         factoryBean.afterPropertiesSet();
         return factoryBean;

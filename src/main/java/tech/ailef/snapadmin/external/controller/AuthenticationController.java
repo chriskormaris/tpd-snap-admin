@@ -1,26 +1,36 @@
 package tech.ailef.snapadmin.external.controller;
 
+import jakarta.servlet.http.HttpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import tech.ailef.snapadmin.external.SnapAdmin;
-import tech.ailef.snapadmin.external.dbmapping.DbObjectSchema;
+import tech.ailef.snapadmin.external.SnapAdminProperties;
 import tech.ailef.snapadmin.external.dbmapping.SnapAdminRepository;
 import tech.ailef.snapadmin.external.dto.Credentials;
 import tech.ailef.snapadmin.external.exceptions.SnapAdminException;
+import tech.ailef.snapadmin.external.service.AuthResponse;
 import tech.ailef.snapadmin.external.service.LdapService;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+
+import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
 @Controller
-@RequestMapping(value= {"/${snapadmin.baseUrl}", "/${snapadmin.baseUrl}/"})
+@RequestMapping(value= {"/${snapadmin.baseUrl}/auth", "/${snapadmin.baseUrl}/auth/"})
 public class AuthenticationController {
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
 
     @Autowired
     private SnapAdminRepository repository;
@@ -29,7 +39,13 @@ public class AuthenticationController {
     private SnapAdmin snapAdmin;
 
     @Autowired
+    private SnapAdminProperties properties;
+
+    @Autowired
     private LdapService ldapService;
+
+    @Autowired
+    private HttpSession httpSession;
 
     @GetMapping("/login")
     public String login() {
@@ -37,53 +53,52 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public String login(Model model, Credentials credentials) {
-	    String username = credentials.username().replace("@tpd.gr", "");
+    public String login(Credentials credentials) {
+        String username = credentials.username().replace("@tpd.gr", "");
 
-        boolean isAuthenticated = ldapService.isAuthenticUser(username, credentials.password());
+        AuthResponse authResponse = ldapService.isAuthenticUser(username, credentials.password());
 
-        snapAdmin.setAuthenticated(isAuthenticated);
-        if (isAuthenticated) {
-            snapAdmin.setUsername(username);
-        } else {
-            throw new SnapAdminException("Σφάλμα πιστοποίησης για τον χρήστη " + username + "!");
+        if (!properties.getWhitelistedUsers().contains(username)
+                && !properties.getAdmins().contains(username)) {
+            logger.error("User {} is not whitelisted!", username);
+            SecurityContextHolder.clearContext();
+            httpSession.setAttribute(SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
+            throw new SnapAdminException("Ο χρήστης " + username + " δεν είναι στη λευκή λίστα!");
         }
 
-        addAttributes(model);
-        model.addAttribute("activePage", "entities");
-        model.addAttribute("title", "Πίνακες | Index");
-        model.addAttribute("snapadmin_authenticated", isAuthenticated);
-        model.addAttribute("snapadmin_authenticatedUser", username);
+        List<GrantedAuthority> authorities = Collections.emptyList();
+        if (properties.getAdmins().contains(username)) {
+            authorities = List.of(new SimpleGrantedAuthority("ADMIN"));
+        }
 
-        return "snapadmin/home";
+        UsernamePasswordAuthenticationToken authWithRoles = new UsernamePasswordAuthenticationToken(
+				username,
+	            credentials.password(),
+	            authorities
+        );
+        authWithRoles.eraseCredentials();
+
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        context.setAuthentication(authWithRoles);
+        SecurityContextHolder.setContext(context);
+
+        httpSession.setAttribute(SPRING_SECURITY_CONTEXT_KEY, context);
+
+        snapAdmin.setLoggedIn(true);
+        snapAdmin.setFullName(authResponse.firstName() + " " + authResponse.lastName());
+
+	    return "redirect:/" + properties.getBaseUrl();
     }
 
     @PostMapping("/logout")
-    public String logout(Model model, @RequestParam(required = false) String query) {
-        boolean isAuthenticated = false;
-        snapAdmin.setAuthenticated(isAuthenticated);
-        snapAdmin.setUsername(null);
+    public String logout() {
+        snapAdmin.setLoggedIn(false);
+        snapAdmin.setFullName("");
 
-        addAttributes(model);
-        model.addAttribute("title", "Αποσύνδεση");
-        model.addAttribute("snapadmin_authenticated", isAuthenticated);
-        model.addAttribute("snapadmin_authenticatedUser", null);
+        SecurityContextHolder.clearContext();
+        httpSession.setAttribute(SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
 
-        return "snapadmin/login";
-    }
-
-    private void addAttributes(Model model) {
-        List<DbObjectSchema> schemas = snapAdmin.getSchemas();
-
-        Map<String, List<DbObjectSchema>> groupedBy =
-                schemas.stream().collect(Collectors.groupingBy(s -> s.getBasePackage()));
-
-        Map<String, Long> counts =
-                schemas.stream().collect(Collectors.toMap(s -> s.getClassName(), s -> repository.count(s)));
-
-        model.addAttribute("schemas", groupedBy);
-        model.addAttribute("query", null);
-        model.addAttribute("counts", counts);
+	    return "redirect:/" + properties.getBaseUrl();
     }
 
 }

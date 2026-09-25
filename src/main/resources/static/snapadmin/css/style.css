@@ -301,6 +301,7 @@ div.sidebar-bottom {
 
 .overflow-auto {
 	overflow: auto;
+	margin: 5px auto;
 }
 
 .color-white {

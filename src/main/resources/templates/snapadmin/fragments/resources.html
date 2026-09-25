@@ -6,7 +6,7 @@
 		<link rel="stylesheet" th:href="|/${snapadmin_baseUrl}/snapadmin/css/snapadmin.css|">
 		<link rel="stylesheet" th:href="|/${snapadmin_baseUrl}/snapadmin/css/style.css|">
 
-		<link rel="icon" type="image/x-icon" th:href="|/${snapadmin_baseUrl}/snapadmin/favicon/favicon.gif|">
+		<link rel="icon" type="image/x-icon" th:href="|/${snapadmin_baseUrl}/snapadmin/favicon/favicon.png|">
 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/js/bootstrap.min.js" integrity="sha512-1/RvZTcCDEUjY/CypiMz+iqqtaoQfAITmNSJY17Myp4Ms5mdxPS5UV7iOfdZoxcGhzFbOm6sntTKJppjvuhg4g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 		<script type="text/javascript" th:src="|/${snapadmin_baseUrl}/snapadmin/js/table.js|"></script>
@@ -16,7 +16,7 @@
 		<script type="text/javascript" th:src="|/${snapadmin_baseUrl}/snapadmin/js/logs.js|"></script>
 		<script type="text/javascript" th:src="|/${snapadmin_baseUrl}/snapadmin/js/create.js|"></script>
 		<script type="text/javascript" th:src="|/${snapadmin_baseUrl}/snapadmin/js/sidebar.js|"></script>
-		<title th:text="${title != null ? title + ' | SnapAdmin' : 'SnapAdmin'}"></title>
+		<title th:text="${title != null ? title + ' | TPD SnapAdmin' : 'TPD SnapAdmin'}"></title>
 		<script th:inline="javascript">
 		    let baseUrl = [[ ${snapadmin_baseUrl} ]];
 		</script>
@@ -40,30 +40,29 @@
 	    <div class="container-fluid">
 	        <a class=" fw-bold navbar-brand" th:href="|/${snapadmin_baseUrl}|">
 				<img th:src="|/${snapadmin_baseUrl}/snapadmin/logo/logo.png|" alt="tpd" height="35">
-<!--				<i class="bi bi-hexagon-fill"></i>-->
-				&nbsp;
+                <!--<i class="bi bi-hexagon-fill"></i>-->
 	        	[[ ${snapadmin_userConf.get('brandName')} ]]
 	        </a>
 	        <div class="d-flex align-items-center p-2" id="current-user">
-                <th:block th:if="${snapadmin_authenticated == null || !snapadmin_authenticated}">
-                    <form method="GET" th:action="|/${snapadmin_baseUrl}/login|" accept-charset="UTF-8">
-                        <button class="btn btn-primary"/>
+                <th:block th:if="${snapadmin_loggedIn == null || !snapadmin_loggedIn}">
+                    <form method="GET" th:action="|/${snapadmin_baseUrl}/auth/login|" accept-charset="UTF-8">
+                        <button class="btn btn-primary">
                             <i class="bi bi-person-circle me-2" style="color: white;"></i> Σύνδεση
                         </button>
                     </form>
                 </th:block>
-                <th:block th:if="${snapadmin_authenticated}">
-                    <span style="color: white;">[[ ${snapadmin_authenticatedUser} ]]&nbsp;</span>
-                    <form method="POST" th:action="|/${snapadmin_baseUrl}/logout|" accept-charset="UTF-8">
-                        <button class="btn btn-primary"/>
-                            <i class="bi bi-person-circle me-2" style="color: white;"></i> Αποσύνδεση
+                <th:block th:if="${snapadmin_loggedIn}">
+                    <span>Συνδεμένος Χρήστης: <strong>[[ ${snapadmin_fullName} ]]</strong> - [[ ${snapadmin_authenticatedUser} ]]&nbsp;</span>
+                    <form method="POST" th:action="|/${snapadmin_baseUrl}/auth/logout|" accept-charset="UTF-8">
+                        <button class="btn btn-primary">
+                            <i class="bi bi-person-circle me-2 color-white"></i> Αποσύνδεση
                         </button>
                     </form>
                 </th:block>
 	        </div>
 	    </div>
 	</nav>
-    <div class="sidebar position-relative sidebar-collapsed" th:fragment="sidebar(page)" style="top: 20px;">
+    <div class="sidebar position-relative sidebar-collapsed" th:fragment="sidebar(page)" style="top: 14px;">
     	<div class="sidebar-top sidebar-collapsed">
         	<h6 class="fw-bold pt-2 ms-3 menu-subheading d-none d-md-block d-md-none">ΚΑΤΑΛΟΓΟΣ</h6>
         	<ul class="sidebar-menu pb-0 mb-0 ">
@@ -219,6 +218,7 @@
 	                    </th:block>
 					  	<select class="form-select page-size">
 					  		<option disabled>Μέγεθος σελίδας</option>
+					  		<option th:selected="${page.getPagination().getPageSize() == 10}">10</option>
 					  		<option th:selected="${page.getPagination().getPageSize() == 20}">20</option>
 					  		<option th:selected="${page.getPagination().getPageSize() == 50}">50</option>
 					  		<option th:selected="${page.getPagination().getPageSize() == 100}">100</option>
@@ -243,6 +243,7 @@
 				  		<input type="hidden" name="pageSize">
 					  	<select class="form-select page-size">
 					  		<option disabled>Μέγεθος σελίδας</option>
+					  		<option th:selected="${page.getPagination().getPageSize() == 10}">10</option>
 					  		<option th:selected="${page.getPagination().getPageSize() == 20}">20</option>
 					  		<option th:selected="${page.getPagination().getPageSize() == 50}">50</option>
 					  		<option th:selected="${page.getPagination().getPageSize() == 100}">100</option>

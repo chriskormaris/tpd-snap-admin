@@ -23,13 +23,18 @@ import static local.tpd.oracle.validation.GreekValidationMessages.NOT_NULL_MESSA
 @Data
 @Entity
 @Getter
-@Table(name = "MHTRWO_ACCOUNT")
+@Table(name = "MHTRWO_ACCOUNT", schema = "DTPD")
 public class MhtrwoAccount {
 
     @Id
     @Column(name = "ID", nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mhtrwo_account_generator")
-    @SequenceGenerator(name = "mhtrwo_account_generator", sequenceName = "MHTRWO_ACCOUNT_SEQ", allocationSize = 1)
+    @SequenceGenerator(
+            name = "mhtrwo_account_generator",
+            sequenceName = "MHTRWO_ACCOUNT_SEQ",
+            allocationSize = 1,
+            schema = "DTPD"
+    )
     private long ID;
 
     @ManyToOne
